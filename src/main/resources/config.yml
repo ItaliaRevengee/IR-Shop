@@ -1,0 +1,75 @@
+# ============================================================
+#  IR-Shop  —  Main Configuration
+#  MiniMessage tags supported in display values.
+# ============================================================
+
+database:
+  # Storage backend: "sqlite" or "mysql"
+  type: sqlite
+  sqlite:
+    file: "irshop.db"
+  mysql:
+    host: "localhost"
+    port: 3306
+    database: "irshop"
+    username: "root"
+    password: "password"
+    pool-size: 10
+    connection-timeout: 30000
+    max-lifetime: 1800000
+    keepalive-time: 30000
+
+economy:
+  # Default economy provider: "vault" or "currencies"
+  default-provider: vault
+  # Settings for ItaliaRevengee/currencies-plugin
+  currencies-plugin:
+    default-currency: "money"
+
+shop:
+  # Show a confirmation GUI before completing a purchase
+  confirm-purchases: true
+  # Shift+click skips the confirmation GUI
+  quick-buy: true
+  # Enable /shop search
+  search-enabled: true
+  search-results-per-page: 28
+  # Default layout applied to newly-created shops
+  default-layout: "classic"
+  # Sound keys must match Bukkit Sound enum names
+  sounds:
+    enabled: true
+    open: "BLOCK_CHEST_OPEN"
+    close: "BLOCK_CHEST_CLOSE"
+    purchase: "ENTITY_EXPERIENCE_ORB_PICKUP"
+    sell: "ENTITY_VILLAGER_TRADE"
+    error: "ENTITY_VILLAGER_NO"
+    page-turn: "ITEM_BOOK_PAGE_TURN"
+    editor-click: "UI_BUTTON_CLICK"
+
+discounts:
+  # Permission node format: irshop.discount.<value>
+  # The highest value the player holds wins.
+  enabled: true
+  max-discount: 90
+
+sell-multipliers:
+  # Permission node format: irshop.sell.<value>  (supports decimals, e.g. irshop.sell.1.5)
+  # The highest value the player holds wins.
+  enabled: true
+
+statistics:
+  enabled: true
+  track-purchases: true
+  track-sales: true
+
+# Geyser / Floodgate — Bedrock player support
+bedrock:
+  enabled: true
+  # UUID prefix used by Floodgate to detect Bedrock players
+  floodgate-prefix: "."
+  # Simplify GUI navigation for touch input
+  simplified-gui: true
+
+# Debug logging — enable only for troubleshooting
+debug: false

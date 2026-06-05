@@ -1,0 +1,76 @@
+name: IR-Shop
+version: '${version}'
+main: com.italiarevenge.iRShop.IRShop
+api-version: '1.21'
+description: Premium Minecraft server shop plugin
+authors:
+  - ItaliaRevengee
+website: https://github.com/ItaliaRevengee/IR-Shop
+load: POSTWORLD
+
+# Soft dependencies loaded before this plugin
+softdepend:
+  - Vault
+  - PlaceholderAPI
+  - CurrenciesPlugin
+
+permissions:
+  irshop.use:
+    description: Allows opening the shop
+    default: true
+  irshop.admin:
+    description: Allows all admin commands
+    default: op
+    children:
+      irshop.use: true
+
+  irshop.discount.10:
+    description: 10% buy discount
+    default: false
+  irshop.discount.25:
+    description: 25% buy discount
+    default: false
+  irshop.discount.50:
+    description: 50% buy discount
+    default: false
+
+  irshop.sell.1.5:
+    description: 1.5x sell price multiplier
+    default: false
+  irshop.sell.2:
+    description: 2x sell price multiplier
+    default: false
+  irshop.sell.3:
+    description: 3x sell price multiplier
+    default: false
+
+  irshop.discount.*:
+    description: All discount permissions
+    default: false
+    children:
+      irshop.discount.10: true
+      irshop.discount.25: true
+      irshop.discount.50: true
+
+  irshop.sellmultiplier.*:
+    description: All sell multiplier permissions
+    default: false
+    children:
+      irshop.sell.1.5: true
+      irshop.sell.2: true
+      irshop.sell.3: true
+
+commands:
+  shop:
+    description: Open a shop or manage your shopping experience
+    usage: /shop [open|list|search|help] [args...]
+    permission: irshop.use
+    aliases:
+      - irshop
+  shopadmin:
+    description: Administrate shops, categories and items
+    usage: /shopadmin [create|edit|delete|reload] [args...]
+    permission: irshop.admin
+    aliases:
+      - sadmin
+      - shopeditor
