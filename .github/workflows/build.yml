@@ -2,10 +2,10 @@ name: Build
 
 on:
   push:
-    # Manual release when pushing a v* tag
+    # Release manuale quando pushi un tag vX.Y.Z
     tags:
       - 'v*'
-    # Auto build/release only when gradle.properties changes
+    # Build/release automatica solo quando cambia gradle.properties (poi verifichiamo pluginVersion via diff)
     branches:
       - '**'
     paths:
@@ -36,11 +36,13 @@ jobs:
           java-version: '21'
           cache: gradle
 
-      - name: Set up Gradle
+      - name: Set up Gradle 8.8
         uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.8'
 
-      # Check if the `version` line changed (not just any line in gradle.properties)
-      - name: Detect version change
+      # Verifica che *pluginVersion* sia cambiata (non solo che gradle.properties sia cambiato)
+      - name: Detect pluginVersion change
         id: pv_changed
         if: github.event_name == 'push' && !startsWith(github.ref, 'refs/tags/')
         shell: bash
@@ -50,17 +52,19 @@ jobs:
           BEFORE="${{ github.event.before }}"
           AFTER="${{ github.sha }}"
 
+          # Se BEFORE è vuoto/zero (caso raro), consideriamo "changed" per sicurezza
           if [[ -z "$BEFORE" || "$BEFORE" == "0000000000000000000000000000000000000000" ]]; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
           else
-            if git diff "$BEFORE" "$AFTER" -- gradle.properties | grep -E '^[+-]\s*version=' >/dev/null; then
+            # Controlla se la riga pluginVersion è stata toccata tra BEFORE e AFTER
+            if git diff "$BEFORE" "$AFTER" -- gradle.properties | grep -E '^[+-]\s*pluginVersion=' >/dev/null; then
               echo "changed=true" >> "$GITHUB_OUTPUT"
             else
               echo "changed=false" >> "$GITHUB_OUTPUT"
             fi
           fi
 
-      - name: Read version
+      - name: Read pluginVersion
         id: plugin_version
         if: |
           (startsWith(github.ref, 'refs/tags/v')) ||
@@ -68,21 +72,21 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          v=$(grep -E '^version=' gradle.properties | head -n 1 | cut -d= -f2- | tr -d '\r' | xargs)
+          v=$(grep -E '^pluginVersion=' gradle.properties | head -n 1 | cut -d= -f2- | tr -d '\r' | xargs)
           if [ -z "$v" ]; then
-            echo "version is empty" >&2
+            echo "pluginVersion is empty" >&2
             exit 1
           fi
           echo "value=$v" >> "$GITHUB_OUTPUT"
 
-      # Build only when: push of v* tag (manual release) OR version changed on default branch (auto release)
+      # Build solo quando: push tag v* (release manuale) O pluginVersion cambiata sul branch di default (release automatica)
       - name: Build
         if: |
           startsWith(github.ref, 'refs/tags/v') ||
           (steps.pv_changed.outputs.changed == 'true' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch))
-        run: ./gradlew --no-daemon build
+        run: gradle --no-daemon build
 
-      - name: Create tag (if missing) — auto bump
+      - name: Create tag (if missing) - auto bump
         id: create_tag
         if: steps.plugin_version.outputs.value != '' && !startsWith(github.ref, 'refs/tags/')
         uses: actions/github-script@v7
@@ -127,28 +131,35 @@ jobs:
         run: |
           set -euo pipefail
 
+          # Determina il tag corrente:
+          # - se push di tag: github.ref_name
+          # - se auto bump: steps.create_tag.outputs.tag
           if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
             CURRENT_TAG="${GITHUB_REF_NAME}"
           else
             CURRENT_TAG="${{ steps.create_tag.outputs.tag }}"
           fi
 
+          # Trova il tag precedente (v*) raggiungibile dal commit precedente
+          # (se non esiste, useremo tutta la history)
           PREV_TAG="$(git describe --tags --match "v*" --abbrev=0 "${GITHUB_SHA}^" 2>/dev/null || true)"
 
+          # Genera il changelog in una variabile temporanea
           CHANGELOG=$(
             echo "## Changelog"
             echo
             if [[ -n "$PREV_TAG" ]]; then
-              echo "_Commits from **$PREV_TAG** to **$CURRENT_TAG**_"
+              echo "_Commits da **$PREV_TAG** a **$CURRENT_TAG**_"
               echo
               git log --no-merges --pretty=format:'- %s (%h)' "${PREV_TAG}..${GITHUB_SHA}"
             else
-              echo "_First release: full commit list up to **$CURRENT_TAG**_"
+              echo "_Prima release trovata: elenco completo dei commit fino a **$CURRENT_TAG**_"
               echo
               git log --no-merges --pretty=format:'- %s (%h)' "${GITHUB_SHA}"
             fi
           )
 
+          # Output multiline corretto per GitHub Actions
           {
             echo "body<<EOF"
             echo "$CHANGELOG"
