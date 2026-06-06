@@ -4,7 +4,7 @@
 display-name: "<red>Redstone"
 description: "Redstone components and automation"
 icon: REDSTONE
-slot: 12
+slot: 13
 
 items:
   - material: REDSTONE

@@ -4,7 +4,7 @@
 display-name: "<gray>Misc"
 description: "Miscellaneous items and utility goods"
 icon: ANVIL
-slot: 23
+slot: 24
 
 items:
   - material: ANVIL

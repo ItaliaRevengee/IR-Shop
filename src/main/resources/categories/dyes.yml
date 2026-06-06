@@ -4,7 +4,7 @@
 display-name: "<light_purple>Dyes"
 description: "Dyes and flowers"
 icon: WHITE_DYE
-slot: 22
+slot: 23
 
 items:
   # ── Dyes (all 16 colors, same price) ──────────────────────

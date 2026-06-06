@@ -4,7 +4,7 @@
 display-name: "<green>Farming"
 description: "Crops, plants and farm produce"
 icon: WHEAT
-slot: 16
+slot: 15
 
 items:
   - material: WHEAT

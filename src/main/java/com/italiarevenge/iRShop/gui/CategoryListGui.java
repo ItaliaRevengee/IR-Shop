@@ -42,10 +42,8 @@ public class CategoryListGui extends BaseGui {
             }
         }
 
-        if (layout.slotClose >= 0) {
-            inventory.setItem(layout.slotClose,
-                    navItem(Material.BARRIER, msg.getRaw("gui.close-name")));
-        }
+        inventory.setItem(closeSlot(),
+                navItem(Material.BARRIER, msg.getRaw("gui.close-name")));
 
         player.openInventory(inventory);
         GuiListener.register(player, this);
@@ -55,7 +53,7 @@ public class CategoryListGui extends BaseGui {
     public void handleClick(InventoryClickEvent event) {
         int slot = event.getRawSlot();
 
-        if (slot == layout.slotClose) {
+        if (slot == closeSlot()) {
             playSound("navigate-back");
             player.closeInventory();
             return;
@@ -92,6 +90,10 @@ public class CategoryListGui extends BaseGui {
         meta.lore(lore);
         item.setItemMeta(meta);
         return item;
+    }
+
+    private int closeSlot() {
+        return layout.rows * 9 - 1;
     }
 
     private ItemStack navItem(Material mat, Component name) {

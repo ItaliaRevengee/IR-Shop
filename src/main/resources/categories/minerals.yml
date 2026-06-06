@@ -4,7 +4,7 @@
 display-name: "<aqua>Minerals"
 description: "Ores, ingots and precious materials"
 icon: DIAMOND_ORE
-slot: 11
+slot: 12
 
 items:
   - material: COAL

@@ -12,12 +12,10 @@ border:
 
 # Navigation button slots (0-indexed: row*9+col)
 nav-slots:
-  back: 27
-  search: 28
-  prev-page: 29
-  close: 31
-  next-page: 33
-  info: 34
+  prev-page: 30
+  back: 31
+  next-page: 32
+  close: 35
 
 # 14 inner slots (rows 1-2, cols 1-7)
 item-slots:

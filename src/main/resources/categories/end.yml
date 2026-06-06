@@ -4,7 +4,7 @@
 display-name: "<dark_purple>End"
 description: "End dimension resources"
 icon: ENDER_PEARL
-slot: 21
+slot: 22
 
 items:
   - material: END_STONE

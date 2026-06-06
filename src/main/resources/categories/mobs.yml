@@ -4,7 +4,7 @@
 display-name: "<dark_green>Mobs"
 description: "Mob drops and creature resources"
 icon: BONE
-slot: 19
+slot: 20
 
 items:
   - material: BONE

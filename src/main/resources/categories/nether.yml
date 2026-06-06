@@ -4,7 +4,7 @@
 display-name: "<dark_red>Nether"
 description: "Nether resources and netherite materials"
 icon: BLAZE_ROD
-slot: 20
+slot: 21
 
 items:
   - material: NETHERRACK
