@@ -36,10 +36,10 @@ jobs:
           java-version: '21'
           cache: gradle
 
-      - name: Set up Gradle 9.4
+      - name: Set up Gradle 9.4.0
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: '9.4'
+          gradle-version: '9.4.0'
 
       # Verifica che *pluginVersion* sia cambiata (non solo che gradle.properties sia cambiato)
       - name: Detect pluginVersion change
