@@ -1,6 +1,6 @@
 # Classic layout — 6-row chest, bordered inner grid
 name: "Classic"
-rows: 6
+rows: 4
 
 background:
   material: GRAY_STAINED_GLASS_PANE
