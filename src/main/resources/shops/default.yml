@@ -3,7 +3,7 @@
 # ============================================================
 
 name: "survival"
-display-name: "<green>Survival Shop"
+display-name: "<gold><bold>Survival Shop"
 description: "Buy and sell survival items"
 currency: "vault"
 layout: "classic"
