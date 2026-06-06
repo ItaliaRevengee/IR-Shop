@@ -2,8 +2,6 @@ package com.italiarevenge.iRShop.gui;
 
 import com.italiarevenge.iRShop.IRShop;
 import com.italiarevenge.iRShop.config.MessageManager;
-import com.italiarevenge.iRShop.model.Shop;
-import com.italiarevenge.iRShop.model.ShopCategory;
 import com.italiarevenge.iRShop.model.ShopItem;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
@@ -24,17 +22,12 @@ public class QuantityGui extends BaseGui {
     private static final int SLOT_PREVIEW = 4;
     private static final int SLOT_BACK    = 22;
 
-    private final Shop shop;
-    private final ShopCategory category;
     private final ShopItem shopItem;
     private final ItemListGui parent;
     private final MessageManager msg;
 
-    public QuantityGui(Player player, Shop shop, ShopCategory category,
-                       ShopItem shopItem, ItemListGui parent) {
+    public QuantityGui(Player player, ShopItem shopItem, ItemListGui parent) {
         super(player);
-        this.shop     = shop;
-        this.category = category;
         this.shopItem = shopItem;
         this.parent   = parent;
         this.msg      = IRShop.get().getMessageManager();

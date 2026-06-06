@@ -7,6 +7,8 @@ import com.italiarevenge.iRShop.economy.EconomyManager;
 import com.italiarevenge.iRShop.model.Shop;
 import com.italiarevenge.iRShop.model.ShopCategory;
 import com.italiarevenge.iRShop.model.ShopItem;
+import com.italiarevenge.iRShop.util.ItemBuilder;
+import com.italiarevenge.iRShop.util.ItemMatcher;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
@@ -17,7 +19,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -70,11 +71,12 @@ public class ItemListGui extends BaseGui {
             if (idx >= items.size()) break;
             ShopItem shopItem = items.get(idx);
             int slot = layout.itemSlots.get(i);
-            inventory.setItem(slot, buildItemStack(shopItem));
+            // Build display item using ItemBuilder (preserves all metadata + appends prices)
+            inventory.setItem(slot, ItemBuilder.buildDisplay(shopItem));
             slotItems[slot] = shopItem;
         }
 
-        // Navigation buttons
+        // Navigation
         if (layout.slotBack >= 0)
             inventory.setItem(layout.slotBack, navItem(Material.ARROW, msg.getRaw("gui.back-name")));
         if (layout.slotClose >= 0)
@@ -99,64 +101,64 @@ public class ItemListGui extends BaseGui {
         int slot       = event.getRawSlot();
         ClickType type = event.getClick();
 
-        if (slot == layout.slotBack) {
-            new CategoryListGui(player, shop).open();
-            return;
-        }
-        if (slot == layout.slotClose) {
-            player.closeInventory();
-            return;
-        }
-        if (slot == layout.slotPrev) { page--; render(); return; }
-        if (slot == layout.slotNext) { page++; render(); return; }
+        if (slot == layout.slotBack)  { new CategoryListGui(player, shop).open(); return; }
+        if (slot == layout.slotClose) { player.closeInventory(); return; }
+        if (slot == layout.slotPrev)  { page--; render(); return; }
+        if (slot == layout.slotNext)  { page++; render(); return; }
 
         ShopItem shopItem = (slot >= 0 && slot < slotItems.length) ? slotItems[slot] : null;
         if (shopItem == null) return;
 
         if (type == ClickType.LEFT || type == ClickType.SHIFT_LEFT) {
-            if (!shopItem.isBuyable()) {
-                player.sendMessage(msg.get("purchase.not-for-sale"));
-                return;
-            }
+            if (!shopItem.isBuyable()) { player.sendMessage(msg.get("purchase.not-for-sale")); return; }
             // Shift+click = quick-buy 1 (skip quantity GUI)
             if (type == ClickType.SHIFT_LEFT && config.isQuickBuy()) {
                 executeBuy(shopItem, 1);
             } else {
-                new QuantityGui(player, shop, category, shopItem, this).open();
+                new QuantityGui(player, shopItem, this).open();
             }
         } else if (type == ClickType.RIGHT) {
             if (!shopItem.isSellable()) { player.sendMessage(msg.get("sell.not-sellable")); return; }
             executeSell(shopItem, 1);
         } else if (type == ClickType.SHIFT_RIGHT) {
             if (!shopItem.isSellable()) { player.sendMessage(msg.get("sell.not-sellable")); return; }
-            executeSell(shopItem, countInInventory(shopItem.getMaterial()));
+            executeSell(shopItem, ItemMatcher.count(player, shopItem));
         }
     }
 
+    // ── transaction methods (called by QuantityGui too) ──────────────────────
+
     public void executeBuy(ShopItem shopItem, int amount) {
-        if (!economy.isAvailable()) {
-            player.sendMessage(msg.get("economy.vault-not-found"));
-            return;
-        }
+        if (!economy.isAvailable()) { player.sendMessage(msg.get("economy.vault-not-found")); return; }
+
         double total = shopItem.getBuyPrice() * amount;
         if (!economy.has(player, total)) {
-            double needed = total - economy.getBalance(player);
             player.sendMessage(msg.get("purchase.insufficient-funds",
                     Placeholder.parsed("currency", "money"),
-                    Placeholder.parsed("needed",   economy.format(needed))));
+                    Placeholder.parsed("needed",   economy.format(total - economy.getBalance(player)))));
             return;
         }
+
         boolean hasSpace = false;
         for (ItemStack s : player.getInventory().getStorageContents()) {
             if (s == null || s.getType() == Material.AIR) { hasSpace = true; break; }
         }
-        if (!hasSpace) {
-            player.sendMessage(msg.get("purchase.inventory-full"));
-            return;
-        }
+        if (!hasSpace) { player.sendMessage(msg.get("purchase.inventory-full")); return; }
 
         economy.withdraw(player, total);
-        player.getInventory().addItem(new ItemStack(shopItem.getMaterial(), amount));
+        // Give the "clean" item (no price lore overlay) in the correct quantity
+        ItemStack toGive = ItemBuilder.buildClean(shopItem);
+        toGive.setAmount(Math.min(amount, toGive.getType().getMaxStackSize()));
+        // If amount > maxStackSize, give in multiple stacks
+        int remaining = amount;
+        while (remaining > 0) {
+            int stackSize = Math.min(remaining, toGive.getType().getMaxStackSize());
+            ItemStack stack = ItemBuilder.buildClean(shopItem);
+            stack.setAmount(stackSize);
+            player.getInventory().addItem(stack);
+            remaining -= stackSize;
+        }
+
         player.sendMessage(msg.get("purchase.success",
                 Placeholder.parsed("amount",    String.valueOf(amount)),
                 Placeholder.parsed("item-name", prettify(shopItem.getMaterial())),
@@ -164,17 +166,15 @@ public class ItemListGui extends BaseGui {
     }
 
     public void executeSell(ShopItem shopItem, int amount) {
-        if (!economy.isAvailable()) {
-            player.sendMessage(msg.get("economy.vault-not-found"));
-            return;
-        }
-        int sellAmount = Math.min(amount, countInInventory(shopItem.getMaterial()));
-        if (sellAmount <= 0) {
-            player.sendMessage(msg.get("sell.no-items"));
-            return;
-        }
+        if (!economy.isAvailable()) { player.sendMessage(msg.get("economy.vault-not-found")); return; }
+
+        // ItemMatcher handles both simple material matching and PDC-filtered matching
+        int available = ItemMatcher.count(player, shopItem);
+        int sellAmount = Math.min(amount, available);
+        if (sellAmount <= 0) { player.sendMessage(msg.get("sell.no-items")); return; }
+
         double total = shopItem.getSellPrice() * sellAmount;
-        removeFromInventory(shopItem.getMaterial(), sellAmount);
+        ItemMatcher.remove(player, shopItem, sellAmount);
         economy.deposit(player, total);
         player.sendMessage(msg.get("sell.success",
                 Placeholder.parsed("amount",    String.valueOf(sellAmount)),
@@ -182,7 +182,7 @@ public class ItemListGui extends BaseGui {
                 Placeholder.parsed("price",     economy.format(total))));
     }
 
-    // ── helpers ─────────────────────────────────────────────────────────────
+    // ── helpers ──────────────────────────────────────────────────────────────
 
     private void fillBackground() {
         ItemStack bg = new ItemStack(layout.bgMaterial);
@@ -190,39 +190,6 @@ public class ItemListGui extends BaseGui {
         m.displayName(Component.empty());
         bg.setItemMeta(m);
         for (int i = 0; i < layout.rows * 9; i++) inventory.setItem(i, bg);
-    }
-
-    private ItemStack buildItemStack(ShopItem shopItem) {
-        ItemStack item = new ItemStack(shopItem.getMaterial());
-        ItemMeta meta  = item.getItemMeta();
-
-        if (shopItem.getCustomName() != null) {
-            meta.displayName(MessageManager.parse(shopItem.getCustomName()));
-        } else {
-            meta.displayName(MessageManager.parse("<white>" + prettify(shopItem.getMaterial())));
-        }
-
-        List<Component> lore = new ArrayList<>();
-        for (String line : shopItem.getCustomLore()) lore.add(MessageManager.parse(line));
-
-        if (shopItem.isBuyable()) {
-            lore.addAll(msg.getList("gui.item-buy-lore-append",
-                    Placeholder.parsed("buy-price", economy.format(shopItem.getBuyPrice())),
-                    Placeholder.parsed("currency",  "money")));
-        } else {
-            String raw = msg.raw().getString("gui.item-not-for-sale", "<red>✗ Not for sale");
-            lore.add(MessageManager.parse(raw));
-        }
-
-        if (shopItem.isSellable()) {
-            lore.addAll(msg.getList("gui.item-sell-lore-append",
-                    Placeholder.parsed("sell-price", economy.format(shopItem.getSellPrice())),
-                    Placeholder.parsed("currency",   "money")));
-        }
-
-        meta.lore(lore);
-        item.setItemMeta(meta);
-        return item;
     }
 
     private ItemStack navItem(Material mat, Component name) {
@@ -240,29 +207,6 @@ public class ItemListGui extends BaseGui {
         meta.lore(lore);
         item.setItemMeta(meta);
         return item;
-    }
-
-    private int countInInventory(Material material) {
-        int count = 0;
-        for (ItemStack s : player.getInventory().getStorageContents())
-            if (s != null && s.getType() == material) count += s.getAmount();
-        return count;
-    }
-
-    private void removeFromInventory(Material material, int amount) {
-        int remaining = amount;
-        ItemStack[] contents = player.getInventory().getStorageContents();
-        for (int i = 0; i < contents.length && remaining > 0; i++) {
-            if (contents[i] == null || contents[i].getType() != material) continue;
-            if (contents[i].getAmount() <= remaining) {
-                remaining -= contents[i].getAmount();
-                contents[i] = null;
-            } else {
-                contents[i].setAmount(contents[i].getAmount() - remaining);
-                remaining = 0;
-            }
-        }
-        player.getInventory().setStorageContents(contents);
     }
 
     private String prettify(Material mat) {
