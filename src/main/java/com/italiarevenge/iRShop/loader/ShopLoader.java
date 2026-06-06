@@ -1,13 +1,16 @@
 package com.italiarevenge.iRShop.loader;
 
-import com.italiarevenge.iRShop.IRShop;
-import com.italiarevenge.iRShop.model.AttributeEntry;
-import com.italiarevenge.iRShop.model.PdcEntry;
-import com.italiarevenge.iRShop.model.Shop;
-import com.italiarevenge.iRShop.model.ShopCategory;
-import com.italiarevenge.iRShop.model.ShopItem;
-import io.papermc.paper.registry.RegistryAccess;
-import io.papermc.paper.registry.RegistryKey;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -21,8 +24,15 @@ import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
-import java.io.File;
-import java.util.*;
+import com.italiarevenge.iRShop.IRShop;
+import com.italiarevenge.iRShop.model.AttributeEntry;
+import com.italiarevenge.iRShop.model.PdcEntry;
+import com.italiarevenge.iRShop.model.Shop;
+import com.italiarevenge.iRShop.model.ShopCategory;
+import com.italiarevenge.iRShop.model.ShopItem;
+
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 
 /**
  * Loads shops, categories, and items from YAML files in the plugin data folder.
@@ -68,11 +78,6 @@ public class ShopLoader {
     private final IRShop plugin;
     private final Map<String, Shop> shops = new LinkedHashMap<>();
 
-    private static final List<String> DEFAULT_CATEGORIES = List.of(
-            "categories/food.yml", "categories/minerals.yml", "categories/blocks.yml",
-            "categories/tools.yml", "categories/armor.yml",   "categories/redstone.yml"
-    );
-
     public ShopLoader(IRShop plugin) {
         this.plugin = plugin;
     }
@@ -88,14 +93,39 @@ public class ShopLoader {
 
     private void saveDefaults() {
         saveIfMissing("shops/default.yml");
-        for (String cat : DEFAULT_CATEGORIES) saveIfMissing(cat);
+        List<String> enabledCategories = getEnabledCategories();
+        for (String cat : enabledCategories) saveIfMissing("categories/" + cat);
+    }
+
+    /**
+     * Reads the list of enabled categories from config.yml
+     * @return list of category filenames (without "categories/" prefix)
+     */
+    private List<String> getEnabledCategories() {
+        File configFile = new File(plugin.getDataFolder(), "config.yml");
+        if (!configFile.exists()) {
+            plugin.getLogger().warning("config.yml not found, using empty category list");
+            return List.of();
+        }
+
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        List<String> categories = config.getStringList("categories.enabled");
+        if (categories.isEmpty()) {
+            plugin.getLogger().warning("No categories found in config.yml 'categories.enabled'");
+        }
+        return categories;
     }
 
     private void saveIfMissing(String path) {
         File f = new File(plugin.getDataFolder(), path);
         if (!f.exists()) {
             f.getParentFile().mkdirs();
-            plugin.saveResource(path, false);
+            try {
+                plugin.saveResource(path, false);
+            } catch (IllegalArgumentException e) {
+                // Resource doesn't exist in JAR, skip silently
+                plugin.getLogger().warning("Resource '" + path + "' not found in JAR, skipping");
+            }
         }
     }
 
@@ -106,10 +136,16 @@ public class ShopLoader {
         File dir = new File(plugin.getDataFolder(), "categories");
         if (!dir.exists()) dir.mkdirs();
 
-        File[] files = dir.listFiles((d, n) -> n.endsWith(".yml"));
-        if (files == null) return map;
-
-        for (File f : files) {
+        // Load only enabled categories from config
+        List<String> enabledCategories = getEnabledCategories();
+        
+        for (String catFile : enabledCategories) {
+            File f = new File(dir, catFile.endsWith(".yml") ? catFile : catFile + ".yml");
+            if (!f.exists()) {
+                plugin.getLogger().warning("Category file not found: " + f.getName());
+                continue;
+            }
+            
             String id = f.getName().replace(".yml", "");
             try {
                 ShopCategory cat = parseCategory(id, YamlConfiguration.loadConfiguration(f));

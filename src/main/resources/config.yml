@@ -7,6 +7,21 @@ economy:
   # Default economy provider: "vault" (more providers coming soon)
   default-provider: vault
 
+categories:
+  # List of category files to load from categories/ folder
+  # Add or remove entries to dynamically control which categories are available
+  enabled:
+    - food.yml
+    - minerals.yml
+    - blocks.yml
+    - redstone.yml
+    - farming.yml
+    - nether.yml
+    - end.yml
+    - dyes.yml
+    - mobs.yml
+    - misc.yml
+
 shop:
   # Show a confirmation GUI before completing a purchase
   confirm-purchases: true
