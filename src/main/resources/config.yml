@@ -1,0 +1,37 @@
+# ============================================================
+#  IR-Shop  —  Main Configuration
+#  MiniMessage tags supported in display values.
+# ============================================================
+
+economy:
+  # Default economy provider: "vault" (more providers coming soon)
+  default-provider: vault
+
+shop:
+  # Show a confirmation GUI before completing a purchase
+  confirm-purchases: true
+  # Shift+click skips the confirmation GUI
+  quick-buy: true
+  # Default layout applied to shops that don't specify one
+  default-layout: "classic"
+  sounds:
+    enabled: true
+    open: "BLOCK_CHEST_OPEN"
+    close: "BLOCK_CHEST_CLOSE"
+    purchase: "ENTITY_EXPERIENCE_ORB_PICKUP"
+    sell: "ENTITY_VILLAGER_TRADE"
+    error: "ENTITY_VILLAGER_NO"
+    page-turn: "ITEM_BOOK_PAGE_TURN"
+
+discounts:
+  # Permission node format: irshop.discount.<value>
+  # The highest value the player holds wins.
+  enabled: true
+  max-discount: 90
+
+sell-multipliers:
+  # Permission node format: irshop.sell.<value>
+  enabled: true
+
+# Debug logging — enable only for troubleshooting
+debug: false

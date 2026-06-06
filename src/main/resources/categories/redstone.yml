@@ -1,0 +1,105 @@
+# ============================================================
+#  IR-Shop — Category: Redstone
+# ============================================================
+display-name: "<red>Redstone"
+description: "Redstone components and automation"
+icon: REDSTONE
+slot: 12
+
+items:
+  - material: REDSTONE
+    buy: 5.0
+    sell: 2.5
+  - material: REDSTONE_BLOCK
+    buy: 40.0
+    sell: 20.0
+  - material: REDSTONE_TORCH
+    buy: 3.0
+    sell: 1.5
+  - material: REPEATER
+    buy: 10.0
+    sell: 5.0
+  - material: COMPARATOR
+    buy: 15.0
+    sell: 7.0
+  - material: OBSERVER
+    buy: 20.0
+    sell: 10.0
+  - material: PISTON
+    buy: 15.0
+    sell: 7.0
+  - material: STICKY_PISTON
+    buy: 20.0
+    sell: 10.0
+  - material: DISPENSER
+    buy: 25.0
+    sell: 12.0
+  - material: DROPPER
+    buy: 20.0
+    sell: 10.0
+  - material: HOPPER
+    buy: 30.0
+    sell: 15.0
+  - material: FURNACE
+    buy: 15.0
+    sell: 7.0
+  - material: BLAST_FURNACE
+    buy: 30.0
+    sell: 15.0
+  - material: SMOKER
+    buy: 20.0
+    sell: 10.0
+  - material: CRAFTING_TABLE
+    buy: 10.0
+    sell: 5.0
+  - material: TNT
+    buy: 50.0
+    sell: 25.0
+  - material: LEVER
+    buy: 2.0
+    sell: 1.0
+  - material: STONE_BUTTON
+    buy: 2.0
+    sell: 1.0
+  - material: OAK_BUTTON
+    buy: 2.0
+    sell: 1.0
+  - material: OAK_PRESSURE_PLATE
+    buy: 3.0
+    sell: 1.5
+  - material: STONE_PRESSURE_PLATE
+    buy: 3.0
+    sell: 1.5
+  - material: DAYLIGHT_DETECTOR
+    buy: 20.0
+    sell: 10.0
+  - material: TRIPWIRE_HOOK
+    buy: 5.0
+    sell: 2.5
+  - material: SLIME_BLOCK
+    buy: 40.0
+    sell: 20.0
+  - material: HONEY_BLOCK
+    buy: 35.0
+    sell: 17.0
+  - material: TARGET
+    buy: 15.0
+    sell: 7.0
+  - material: NOTE_BLOCK
+    buy: 10.0
+    sell: 5.0
+  - material: DETECTOR_RAIL
+    buy: 8.0
+    sell: 4.0
+  - material: ACTIVATOR_RAIL
+    buy: 8.0
+    sell: 4.0
+  - material: POWERED_RAIL
+    buy: 12.0
+    sell: 6.0
+  - material: RAIL
+    buy: 5.0
+    sell: 2.5
+  - material: MINECART
+    buy: 25.0
+    sell: 12.0

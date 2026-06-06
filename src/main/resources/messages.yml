@@ -1,0 +1,85 @@
+# ============================================================
+#  IR-Shop  —  Messages
+#  All values support MiniMessage formatting.
+#  https://docs.advntr.dev/minimessage/format.html
+# ============================================================
+
+prefix: "<dark_gray>[<gradient:#FF6B35:#FFD166>IR-Shop</gradient>]</dark_gray> "
+
+shop:
+  opened: "<green>Opened <white><shop-name></white>."
+  closed: "<gray>Shop closed."
+  not-found: "<red>Shop '<white><name></white>' not found."
+  no-permission: "<red>You don't have permission to access this shop."
+  list-header: "<gold><bold>Available Shops</bold></gold>"
+  list-entry: "  <yellow>• <white><name></white> <dark_gray>— <gray><description>"
+  list-empty: "<gray>No shops available."
+
+purchase:
+  success: "<green>Purchased <white><amount>x <item-name></white> for <white><price></white>!"
+  insufficient-funds: "<red>Insufficient funds. You need <white><needed></white> more."
+  not-for-sale: "<red>This item is not available for purchase."
+  cancelled: "<gray>Purchase cancelled."
+  inventory-full: "<red>Your inventory is full!"
+
+sell:
+  success: "<green>Sold <white><amount>x <item-name></white> for <white><price></white>!"
+  not-sellable: "<red>This item cannot be sold here."
+  no-items: "<red>You don't have any of this item to sell."
+
+confirm-gui:
+  title: "<dark_gray>Confirm <green>Purchase</green>"
+  confirm-name: "<green><bold>✔ Confirm</bold></green>"
+  confirm-lore:
+    - "<gray>Item: <white><item-name>"
+    - "<gray>Amount: <white><amount>"
+    - "<gray>Total: <white><price>"
+    - ""
+    - "<green>Click to confirm"
+  cancel-name: "<red><bold>✗ Cancel</bold></red>"
+  cancel-lore:
+    - "<red>Click to cancel"
+
+admin:
+  reloaded: "<green>IR-Shop reloaded in <white><ms>ms</white>."
+  reload-error: "<red>Reload failed — check console for details."
+
+economy:
+  vault-not-found: "<red>Vault not found. Please install Vault + an economy plugin."
+
+general:
+  player-only: "<red>This command can only be used by players."
+  no-permission: "<red>You don't have permission to do this."
+  invalid-usage: "<red>Usage: <white><usage></white>"
+  unknown-subcommand: "<red>Unknown subcommand. Try <white>/shop help</white>."
+
+help:
+  header: "<dark_gray>━━━[ <gradient:#FF6B35:#FFD166>IR-Shop Help</gradient> <dark_gray>]━━━"
+  footer: "<dark_gray>━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  shop: "  <yellow>/shop</yellow> <dark_gray>—</dark_gray> <gray>Open the default shop"
+  shop-open: "  <yellow>/shop open <name></yellow> <dark_gray>—</dark_gray> <gray>Open a specific shop"
+  shop-list: "  <yellow>/shop list</yellow> <dark_gray>—</dark_gray> <gray>List all shops"
+  admin-reload: "  <yellow>/shopadmin reload</yellow> <dark_gray>—</dark_gray> <gray>Reload everything"
+
+gui:
+  prev-page-name: "<yellow>« Previous Page"
+  prev-page-lore:
+    - "<gray>Page <white><current></white> of <white><total></white>"
+  next-page-name: "<yellow>Next Page »"
+  next-page-lore:
+    - "<gray>Page <white><current></white> of <white><total></white>"
+  close-name: "<red>✕ Close"
+  back-name: "<yellow>← Back"
+
+  item-buy-lore-append:
+    - ""
+    - "<gray>Buy: <green><buy-price> <currency>"
+    - "<yellow>Left-click <gray>to buy"
+    - "<yellow>Shift-click <gray>to buy (skip confirm)"
+
+  item-sell-lore-append:
+    - "<gray>Sell: <gold><sell-price> <currency>"
+    - "<yellow>Right-click <gray>to sell 1"
+    - "<yellow>Shift-right-click <gray>to sell all"
+
+  item-not-for-sale: "<red>✗ Not for sale"

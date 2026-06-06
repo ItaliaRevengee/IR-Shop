@@ -1,0 +1,51 @@
+# Classic layout — 6-row chest, bordered inner grid
+name: "Classic"
+rows: 6
+
+background:
+  material: GRAY_STAINED_GLASS_PANE
+  name: " "
+
+border:
+  material: BLACK_STAINED_GLASS_PANE
+  name: " "
+
+# Navigation button slots (0-indexed: row*9+col)
+nav-slots:
+  back: 45
+  prev-page: 48
+  close: 49
+  next-page: 50
+  search: 47
+  info: 53
+
+# 28 inner slots (rows 1-4, cols 1-7)
+item-slots:
+  - 10
+  - 11
+  - 12
+  - 13
+  - 14
+  - 15
+  - 16
+  - 19
+  - 20
+  - 21
+  - 22
+  - 23
+  - 24
+  - 25
+  - 28
+  - 29
+  - 30
+  - 31
+  - 32
+  - 33
+  - 34
+  - 37
+  - 38
+  - 39
+  - 40
+  - 41
+  - 42
+  - 43

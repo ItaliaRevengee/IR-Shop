@@ -1,0 +1,48 @@
+# Modern layout — 5-row chest, wider item grid
+name: "Modern"
+rows: 5
+
+background:
+  material: LIGHT_BLUE_STAINED_GLASS_PANE
+  name: " "
+
+border:
+  material: BLUE_STAINED_GLASS_PANE
+  name: " "
+
+nav-slots:
+  back: 36
+  prev-page: 39
+  close: 40
+  next-page: 41
+  info: 44
+
+item-slots:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 10
+  - 11
+  - 12
+  - 13
+  - 14
+  - 15
+  - 16
+  - 19
+  - 20
+  - 21
+  - 22
+  - 23
+  - 24
+  - 25
+  - 28
+  - 29
+  - 30
+  - 31
+  - 32
+  - 33
+  - 34

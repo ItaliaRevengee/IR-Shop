@@ -1,0 +1,93 @@
+# ============================================================
+#  IR-Shop — Category: Blocks
+# ============================================================
+display-name: "<white>Blocks"
+description: "Building blocks and terrain materials"
+icon: GRASS_BLOCK
+slot: 10
+
+items:
+  - material: DIRT
+    buy: 1.0
+    sell: 0.5
+  - material: GRASS_BLOCK
+    buy: 2.0
+    sell: 1.0
+  - material: STONE
+    buy: 2.0
+    sell: 1.0
+  - material: COBBLESTONE
+    buy: 1.5
+    sell: 0.8
+  - material: DEEPSLATE
+    buy: 3.0
+    sell: 1.5
+  - material: COBBLED_DEEPSLATE
+    buy: 2.5
+    sell: 1.2
+  - material: SAND
+    buy: 2.0
+    sell: 1.0
+  - material: RED_SAND
+    buy: 2.5
+    sell: 1.2
+  - material: GRAVEL
+    buy: 2.0
+    sell: 1.0
+  - material: CLAY
+    buy: 3.0
+    sell: 1.5
+  - material: OAK_LOG
+    buy: 5.0
+    sell: 3.0
+  - material: BIRCH_LOG
+    buy: 5.0
+    sell: 3.0
+  - material: SPRUCE_LOG
+    buy: 5.0
+    sell: 3.0
+  - material: JUNGLE_LOG
+    buy: 6.0
+    sell: 3.5
+  - material: ACACIA_LOG
+    buy: 5.0
+    sell: 3.0
+  - material: DARK_OAK_LOG
+    buy: 5.0
+    sell: 3.0
+  - material: OAK_PLANKS
+    buy: 2.0
+    sell: 1.0
+  - material: SPRUCE_PLANKS
+    buy: 2.0
+    sell: 1.0
+  - material: GLASS
+    buy: 3.0
+    sell: 1.5
+  - material: BRICKS
+    buy: 5.0
+    sell: 2.5
+  - material: STONE_BRICKS
+    buy: 4.0
+    sell: 2.0
+  - material: NETHERRACK
+    buy: 1.0
+    sell: 0.5
+  - material: SOUL_SAND
+    buy: 3.0
+    sell: 1.5
+  - material: OBSIDIAN
+    buy: 20.0
+    sell: 10.0
+  - material: ICE
+    buy: 5.0
+    sell: 2.5
+  - material: SNOW_BLOCK
+    buy: 3.0
+    sell: 1.5
+  - material: CACTUS
+    buy: 2.0
+    sell: 1.0
+  - material: BAMBOO
+    buy: 1.5
+    sell: 0.8

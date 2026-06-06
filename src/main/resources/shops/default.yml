@@ -1,0 +1,18 @@
+# ============================================================
+#  IR-Shop — Default Shop Definition
+# ============================================================
+
+name: "survival"
+display-name: "<green>Survival Shop"
+description: "Buy and sell survival items"
+currency: "vault"
+layout: "classic"
+icon: CHEST
+
+categories:
+  - blocks
+  - minerals
+  - redstone
+  - food
+  - tools
+  - armor
