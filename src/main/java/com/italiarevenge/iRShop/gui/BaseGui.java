@@ -17,6 +17,9 @@ public abstract class BaseGui {
     public abstract void open();
     public abstract void handleClick(InventoryClickEvent event);
 
+    /** Called when the player closes this GUI. Override to cancel tasks/cleanup. */
+    public void onClose() {}
+
     public Inventory getInventory() { return inventory; }
 
     protected void playSound(String key) {

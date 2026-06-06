@@ -19,8 +19,12 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import org.bukkit.scheduler.BukkitTask;
+
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ItemListGui extends BaseGui implements TransactionHost {
 
@@ -33,6 +37,7 @@ public class ItemListGui extends BaseGui implements TransactionHost {
 
     private int page;
     private final ShopItem[] slotItems;
+    private final Map<Integer, BukkitTask> cyclingTasks = new HashMap<>();
 
     public ItemListGui(Player player, Shop shop, ShopCategory category, int page) {
         super(player);
@@ -56,6 +61,7 @@ public class ItemListGui extends BaseGui implements TransactionHost {
     }
 
     private void render() {
+        cancelAllCyclingTasks();
         inventory.clear();
         Arrays.fill(slotItems, null);
         fillBackground();
@@ -71,9 +77,9 @@ public class ItemListGui extends BaseGui implements TransactionHost {
             if (idx >= items.size()) break;
             ShopItem shopItem = items.get(idx);
             int slot = layout.itemSlots.get(i);
-            // Build display item using ItemBuilder (preserves all metadata + appends prices)
             inventory.setItem(slot, ItemBuilder.buildDisplay(shopItem));
             slotItems[slot] = shopItem;
+            if (shopItem.hasVariants()) startCycling(slot, shopItem);
         }
 
         // Navigation
@@ -240,5 +246,40 @@ public class ItemListGui extends BaseGui implements TransactionHost {
         StringBuilder sb = new StringBuilder();
         for (String w : words) sb.append(Character.toUpperCase(w.charAt(0))).append(w.substring(1)).append(' ');
         return sb.toString().trim();
+    }
+
+    // ── variant cycling ──────────────────────────────────────────────────────
+
+    private void startCycling(int slot, ShopItem groupItem) {
+        List<ShopItem> variants = groupItem.getVariants();
+        if (variants.size() < 2) return;
+
+        // Pre-build the display meta once (name + lore from the group item)
+        ItemStack baseDisplay = ItemBuilder.buildDisplay(groupItem);
+        ItemMeta  baseMeta   = baseDisplay.getItemMeta();
+
+        final int[] index = {0};
+        BukkitTask task = new org.bukkit.scheduler.BukkitRunnable() {
+            @Override public void run() {
+                if (inventory == null) { cancel(); return; }
+                index[0] = (index[0] + 1) % variants.size();
+                Material mat = variants.get(index[0]).getMaterial();
+                ItemStack cycled = new ItemStack(mat);
+                cycled.setItemMeta(baseMeta.clone());
+                inventory.setItem(slot, cycled);
+            }
+        }.runTaskTimer(IRShop.get(), 30L, 30L);
+
+        cyclingTasks.put(slot, task);
+    }
+
+    private void cancelAllCyclingTasks() {
+        cyclingTasks.values().forEach(BukkitTask::cancel);
+        cyclingTasks.clear();
+    }
+
+    @Override
+    public void onClose() {
+        cancelAllCyclingTasks();
     }
 }

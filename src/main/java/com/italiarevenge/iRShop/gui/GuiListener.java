@@ -39,6 +39,7 @@ public class GuiListener implements Listener {
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
         if (!(event.getPlayer() instanceof Player player)) return;
-        openGuis.remove(player.getUniqueId());
+        BaseGui gui = openGuis.remove(player.getUniqueId());
+        if (gui != null) gui.onClose();
     }
 }

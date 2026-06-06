@@ -180,19 +180,27 @@ public final class ItemBuilder {
         var economy = IRShop.get().getEconomyManager();
 
         if (shopItem.hasVariants()) {
-            // Show price range from parent item, then a "choose variant" hint
-            if (shopItem.isBuyable()) {
-                lore.addAll(msg.getList("gui.item-buy-lore-append",
-                        Placeholder.parsed("buy-price", economy.format(shopItem.getBuyPrice())),
+            List<ShopItem> variants = shopItem.getVariants();
+            double firstBuy  = variants.get(0).getBuyPrice();
+            double firstSell = variants.get(0).getSellPrice();
+            boolean uniformBuy  = variants.stream().allMatch(v -> v.getBuyPrice()  == firstBuy);
+            boolean uniformSell = variants.stream().allMatch(v -> v.getSellPrice() == firstSell);
+            boolean anyBuyable  = variants.stream().anyMatch(ShopItem::isBuyable);
+            boolean anySellable = variants.stream().anyMatch(ShopItem::isSellable);
+
+            if (anyBuyable && uniformBuy && variants.get(0).isBuyable()) {
+                lore.addAll(msg.getList("gui.item-buy-price-only",
+                        Placeholder.parsed("buy-price", economy.format(firstBuy)),
                         Placeholder.parsed("currency",  "money")));
+            } else if (!anyBuyable) {
+                lore.add(MessageManager.parse(msg.raw().getString("gui.item-not-for-sale", "<red>✗ Not for sale")));
             }
-            if (shopItem.isSellable()) {
-                lore.addAll(msg.getList("gui.item-sell-lore-append",
-                        Placeholder.parsed("sell-price", economy.format(shopItem.getSellPrice())),
+            if (anySellable && uniformSell && variants.get(0).isSellable()) {
+                lore.addAll(msg.getList("gui.item-sell-price-only",
+                        Placeholder.parsed("sell-price", economy.format(firstSell)),
                         Placeholder.parsed("currency",   "money")));
             }
-            String hint = msg.raw().getString("gui.item-variants-hint", "<yellow>Click <gray>to choose a variant");
-            lore.add(MessageManager.parse(hint));
+            lore.add(MessageManager.parse(msg.raw().getString("gui.item-variants-hint", "<yellow>Click <gray>to choose a variant")));
             return;
         }
 

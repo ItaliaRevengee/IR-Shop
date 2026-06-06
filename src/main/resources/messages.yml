@@ -91,6 +91,13 @@ gui:
     - "<yellow>Right-click <gray>to sell 1"
     - "<yellow>Shift-right-click <gray>to sell all"
 
+  item-buy-price-only:
+    - ""
+    - "<gray>Buy: <green><buy-price> <currency>"
+
+  item-sell-price-only:
+    - "<gray>Sell: <gold><sell-price> <currency>"
+
   item-not-for-sale: "<red>✗ Not for sale"
 
   variant-gui-title: "<dark_gray>Choose <yellow>Variant"

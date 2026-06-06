@@ -23,14 +23,15 @@ public class AdminItemEditGui extends BaseGui {
 
     // Layout (27 slots = 3 rows):
     //  [bg][bg][bg][bg][ITEM][bg][bg][bg][bg]   0-8
-    //  [bg][BUY][bg][bg][bg][bg][SELL][bg][bg]  9-17
+    //  [bg][BUY][bg][bg][VARIANTS][bg][SELL][bg][bg]  9-17
     //  [BACK][bg][bg][bg][bg][bg][bg][bg][DEL] 18-26
-    private static final int SIZE       = 27;
-    private static final int SLOT_ITEM  = 4;
-    private static final int SLOT_BUY   = 10;
-    private static final int SLOT_SELL  = 16;
-    private static final int SLOT_BACK  = 18;
-    private static final int SLOT_DEL   = 26;
+    private static final int SIZE           = 27;
+    private static final int SLOT_ITEM      = 4;
+    private static final int SLOT_BUY       = 10;
+    private static final int SLOT_VARIANTS  = 13;
+    private static final int SLOT_SELL      = 16;
+    private static final int SLOT_BACK      = 18;
+    private static final int SLOT_DEL       = 26;
 
     private final Shop shop;
     private final ShopCategory category;
@@ -57,6 +58,9 @@ public class AdminItemEditGui extends BaseGui {
         inventory.setItem(SLOT_ITEM, ItemBuilder.buildDisplay(shopItem));
         inventory.setItem(SLOT_BUY,  buildPriceButton(true));
         inventory.setItem(SLOT_SELL, buildPriceButton(false));
+        if (shopItem.hasVariants()) {
+            inventory.setItem(SLOT_VARIANTS, buildVariantsButton());
+        }
         inventory.setItem(SLOT_BACK, navItem(Material.ARROW,
                 MessageManager.parse("<yellow>← Indietro")));
         inventory.setItem(SLOT_DEL,  navItem(Material.BARRIER,
@@ -71,8 +75,12 @@ public class AdminItemEditGui extends BaseGui {
         int slot = event.getRawSlot();
 
         switch (slot) {
-            case SLOT_BACK -> new AdminItemListGui(player, shop, category, page).open();
-            case SLOT_DEL  -> handleDelete();
+            case SLOT_BACK     -> new AdminItemListGui(player, shop, category, page).open();
+            case SLOT_DEL      -> handleDelete();
+            case SLOT_VARIANTS -> {
+                if (shopItem.hasVariants())
+                    new AdminVariantListGui(player, shop, category, shopItem, itemIndex, page, 0).open();
+            }
             case SLOT_BUY  -> {
                 player.closeInventory();
                 AdminChatInputListener.startEditBuy(
@@ -103,6 +111,19 @@ public class AdminItemEditGui extends BaseGui {
     }
 
     // ── builders ─────────────────────────────────────────────────────────────
+
+    private ItemStack buildVariantsButton() {
+        int count = shopItem.getVariants().size();
+        ItemStack item = new ItemStack(Material.BOOKSHELF);
+        ItemMeta meta = item.getItemMeta();
+        meta.displayName(MessageManager.parse("<aqua>Gestisci Varianti"));
+        meta.lore(List.of(
+                MessageManager.parse("<gray>Varianti: <white>" + count),
+                Component.empty(),
+                MessageManager.parse("<yellow>Click <gray>per modificare")));
+        item.setItemMeta(meta);
+        return item;
+    }
 
     private ItemStack buildPriceButton(boolean isBuy) {
         Material mat = isBuy ? Material.EMERALD : Material.GOLD_INGOT;
