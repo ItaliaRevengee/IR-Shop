@@ -28,9 +28,9 @@ IR-Shop è un plugin premium per server Minecraft basato su Paper/Spigot che agg
 - `irshop.discount.10` - sconto 10% sugli acquisti.
 - `irshop.discount.25` - sconto 25% sugli acquisti.
 - `irshop.discount.50` - sconto 50% sugli acquisti.
+- `irshop.sell.1.25` - moltiplicatore 1.25x per la vendita.
 - `irshop.sell.1.5` - moltiplicatore 1.5x per la vendita.
 - `irshop.sell.2` - moltiplicatore 2x per la vendita.
-- `irshop.sell.3` - moltiplicatore 3x per la vendita.
 
 ## Costruzione
 

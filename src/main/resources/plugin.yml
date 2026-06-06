@@ -32,14 +32,14 @@ permissions:
     description: 50% buy discount
     default: false
 
+  irshop.sell.1.25:
+    description: 1.25x sell price multiplier
+    default: false
   irshop.sell.1.5:
     description: 1.5x sell price multiplier
     default: false
   irshop.sell.2:
     description: 2x sell price multiplier
-    default: false
-  irshop.sell.3:
-    description: 3x sell price multiplier
     default: false
 
 commands:
