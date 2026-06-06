@@ -161,7 +161,7 @@ public class ItemListGui extends BaseGui {
 
         player.sendMessage(msg.get("purchase.success",
                 Placeholder.parsed("amount",    String.valueOf(amount)),
-                Placeholder.parsed("item-name", prettify(shopItem.getMaterial())),
+                Placeholder.parsed("item-name", itemDisplayName(shopItem)),
                 Placeholder.parsed("price",     economy.format(total))));
     }
 
@@ -178,7 +178,7 @@ public class ItemListGui extends BaseGui {
         economy.deposit(player, total);
         player.sendMessage(msg.get("sell.success",
                 Placeholder.parsed("amount",    String.valueOf(sellAmount)),
-                Placeholder.parsed("item-name", prettify(shopItem.getMaterial())),
+                Placeholder.parsed("item-name", itemDisplayName(shopItem)),
                 Placeholder.parsed("price",     economy.format(total))));
     }
 
@@ -207,6 +207,21 @@ public class ItemListGui extends BaseGui {
         meta.lore(lore);
         item.setItemMeta(meta);
         return item;
+    }
+
+    private String itemDisplayName(ShopItem shopItem) {
+        if (shopItem.getCustomName() != null) return shopItem.getCustomName();
+        if (shopItem.isSerialized()) {
+            try {
+                ItemStack built = ItemBuilder.buildClean(shopItem);
+                ItemMeta m = built.getItemMeta();
+                if (m != null && m.hasDisplayName()) {
+                    return net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
+                            .plainText().serialize(m.displayName());
+                }
+            } catch (Exception ignored) {}
+        }
+        return prettify(shopItem.getMaterial());
     }
 
     private String prettify(Material mat) {
