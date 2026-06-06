@@ -94,8 +94,8 @@ public class ShopItem {
     public Material getMaterial()               { return material; }
     public double getBuyPrice()                 { return buyPrice; }
     public double getSellPrice()                { return sellPrice; }
-    public boolean isBuyable()                  { return buyPrice > 0; }
-    public boolean isSellable()                 { return sellPrice > 0; }
+    public boolean isBuyable()                  { return buyPrice >= 0; }
+    public boolean isSellable()                 { return sellPrice >= 0; }
     public String getCustomName()               { return customName; }
     public List<String> getCustomLore()         { return customLore; }
     public Map<Enchantment, Integer> getEnchantments()       { return enchantments; }

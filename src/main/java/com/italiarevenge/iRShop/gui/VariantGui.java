@@ -47,7 +47,7 @@ public class VariantGui extends BaseGui implements TransactionHost {
         int contentRows = Math.max(1, (int) Math.ceil(varCount / 9.0));
         this.rows        = Math.min(6, contentRows + 1);
         this.navRowStart = (rows - 1) * 9;
-        this.slotBack    = navRowStart;
+        this.slotBack    = navRowStart + 4;
         this.slotClose   = navRowStart + 8;
         this.slotItems   = new ShopItem[rows * 9];
     }

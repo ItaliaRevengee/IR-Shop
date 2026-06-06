@@ -91,29 +91,6 @@ items:
       - RED_STAINED_GLASS
       - BLACK_STAINED_GLASS
 
-  # ── Stained Glass Panes (all 16 colors, same price) ───────
-  - material: WHITE_STAINED_GLASS_PANE
-    buy: 30.0
-    sell: 0.20
-    name: "<white>Glass Pane"
-    variants:
-      - WHITE_STAINED_GLASS_PANE
-      - ORANGE_STAINED_GLASS_PANE
-      - MAGENTA_STAINED_GLASS_PANE
-      - LIGHT_BLUE_STAINED_GLASS_PANE
-      - YELLOW_STAINED_GLASS_PANE
-      - LIME_STAINED_GLASS_PANE
-      - PINK_STAINED_GLASS_PANE
-      - GRAY_STAINED_GLASS_PANE
-      - LIGHT_GRAY_STAINED_GLASS_PANE
-      - CYAN_STAINED_GLASS_PANE
-      - PURPLE_STAINED_GLASS_PANE
-      - BLUE_STAINED_GLASS_PANE
-      - BROWN_STAINED_GLASS_PANE
-      - GREEN_STAINED_GLASS_PANE
-      - RED_STAINED_GLASS_PANE
-      - BLACK_STAINED_GLASS_PANE
-
   - material: TINTED_GLASS
     buy: 150.0
     sell: 2.0
@@ -249,6 +226,7 @@ items:
       - DARK_OAK_LOG
       - CHERRY_LOG
       - MANGROVE_LOG
+      - PALE_OAK_LOG
 
   # ── Wool (all 16 colors, same price) ─────────────────────
   - material: WHITE_WOOL

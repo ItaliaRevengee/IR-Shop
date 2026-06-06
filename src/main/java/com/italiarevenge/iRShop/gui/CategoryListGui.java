@@ -2,6 +2,7 @@ package com.italiarevenge.iRShop.gui;
 
 import com.italiarevenge.iRShop.IRShop;
 import com.italiarevenge.iRShop.config.MessageManager;
+import com.italiarevenge.iRShop.economy.EconomyManager;
 import com.italiarevenge.iRShop.model.Shop;
 import com.italiarevenge.iRShop.model.ShopCategory;
 import net.kyori.adventure.text.Component;
@@ -11,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,12 +22,14 @@ public class CategoryListGui extends BaseGui {
     private final Shop shop;
     private final Layout layout;
     private final MessageManager msg;
+    private final EconomyManager economy;
 
     public CategoryListGui(Player player, Shop shop) {
         super(player);
-        this.shop   = shop;
-        this.layout = IRShop.get().getLayoutLoader().get(shop.getLayout());
-        this.msg    = IRShop.get().getMessageManager();
+        this.shop    = shop;
+        this.layout  = IRShop.get().getLayoutLoader().get(shop.getLayout());
+        this.msg     = IRShop.get().getMessageManager();
+        this.economy = IRShop.get().getEconomyManager();
     }
 
     @Override
@@ -42,6 +46,7 @@ public class CategoryListGui extends BaseGui {
             }
         }
 
+        inventory.setItem(playerInfoSlot(), buildPlayerHead());
         inventory.setItem(closeSlot(),
                 navItem(Material.BARRIER, msg.getRaw("gui.close-name")));
 
@@ -92,8 +97,27 @@ public class CategoryListGui extends BaseGui {
         return item;
     }
 
+    private int playerInfoSlot() {
+        return (layout.rows - 1) * 9;
+    }
+
     private int closeSlot() {
         return layout.rows * 9 - 1;
+    }
+
+    private ItemStack buildPlayerHead() {
+        ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
+        SkullMeta meta  = (SkullMeta) skull.getItemMeta();
+        meta.setOwningPlayer(player);
+        meta.displayName(MessageManager.parse("<gold>" + player.getName()));
+
+        List<Component> lore = new ArrayList<>();
+        if (economy.isAvailable()) {
+            lore.add(MessageManager.parse("<gray>Balance: <green>" + economy.format(economy.getBalance(player))));
+        }
+        meta.lore(lore);
+        skull.setItemMeta(meta);
+        return skull;
     }
 
     private ItemStack navItem(Material mat, Component name) {
