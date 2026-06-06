@@ -3,7 +3,9 @@ package com.italiarevenge.iRShop.command;
 import com.italiarevenge.iRShop.IRShop;
 import com.italiarevenge.iRShop.config.MessageManager;
 import com.italiarevenge.iRShop.gui.CategoryListGui;
+import com.italiarevenge.iRShop.gui.ItemListGui;
 import com.italiarevenge.iRShop.model.Shop;
+import com.italiarevenge.iRShop.model.ShopCategory;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -13,6 +15,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ShopCommand implements CommandExecutor, TabCompleter {
 
@@ -62,9 +65,29 @@ public class ShopCommand implements CommandExecutor, TabCompleter {
                 }
             }
             case "help" -> sendHelp(player);
-            default     -> player.sendMessage(msg.get("general.unknown-subcommand"));
+            default -> {
+                // Try to match a category ID directly: /shop <categoryId>
+                Map.Entry<Shop, ShopCategory> found = findCategory(args[0]);
+                if (found != null) {
+                    new ItemListGui(player, found.getKey(), found.getValue(), 0).open();
+                } else {
+                    player.sendMessage(msg.get("general.unknown-subcommand"));
+                }
+            }
         }
         return true;
+    }
+
+    /** Returns the first shop+category pair whose category ID matches, or null. */
+    private Map.Entry<Shop, ShopCategory> findCategory(String categoryId) {
+        for (Shop shop : plugin.getShopLoader().getShops().values()) {
+            for (ShopCategory cat : shop.getCategories()) {
+                if (cat.getId().equalsIgnoreCase(categoryId)) {
+                    return Map.entry(shop, cat);
+                }
+            }
+        }
+        return null;
     }
 
     private void openDefault(Player player) {
@@ -89,7 +112,15 @@ public class ShopCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        if (args.length == 1) return List.of("open", "list", "help");
+        if (args.length == 1) {
+            List<String> completions = new ArrayList<>(List.of("open", "list", "help"));
+            for (Shop shop : plugin.getShopLoader().getShops().values()) {
+                for (ShopCategory cat : shop.getCategories()) {
+                    if (!completions.contains(cat.getId())) completions.add(cat.getId());
+                }
+            }
+            return completions;
+        }
         if (args.length == 2 && args[0].equalsIgnoreCase("open"))
             return new ArrayList<>(plugin.getShopLoader().getShops().keySet());
         return List.of();
