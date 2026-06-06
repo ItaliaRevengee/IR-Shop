@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.italiarevenge"
-version = "1.0.0"
+version = project.property("pluginVersion") as String
 description = "Premium Minecraft server shop plugin for PaperMC 1.21.11+"
 
 repositories {
