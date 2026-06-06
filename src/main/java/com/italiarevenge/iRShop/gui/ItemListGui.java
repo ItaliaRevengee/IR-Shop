@@ -52,7 +52,6 @@ public class ItemListGui extends BaseGui implements TransactionHost {
                 MessageManager.parse(category.getDisplayName()));
         render();
         player.openInventory(inventory);
-        playSound("open");
         GuiListener.register(player, this);
     }
 
@@ -102,8 +101,8 @@ public class ItemListGui extends BaseGui implements TransactionHost {
         int slot       = event.getRawSlot();
         ClickType type = event.getClick();
 
-        if (slot == layout.slotBack)  { playSound("page-turn"); new CategoryListGui(player, shop).open(); return; }
-        if (slot == layout.slotClose) { playSound("close"); player.closeInventory(); return; }
+        if (slot == layout.slotBack)  { playSound("navigate-back"); new CategoryListGui(player, shop).open(); return; }
+        if (slot == layout.slotClose) { playSound("navigate-back"); player.closeInventory(); return; }
         if (slot == layout.slotPrev)  { playSound("page-turn"); page--; render(); return; }
         if (slot == layout.slotNext)  { playSound("page-turn"); page++; render(); return; }
 
@@ -123,6 +122,7 @@ public class ItemListGui extends BaseGui implements TransactionHost {
             if (type == ClickType.SHIFT_LEFT && config.isQuickBuy()) {
                 executeBuy(shopItem, 1);
             } else {
+                playSound("navigate-back");
                 new QuantityGui(player, shopItem, this).open();
             }
         } else if (type == ClickType.RIGHT) {

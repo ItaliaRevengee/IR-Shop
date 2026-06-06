@@ -22,6 +22,7 @@ shop:
     sell: "entity.villager.trade"
     error: "entity.villager.no"
     page-turn: "item.book.page_turn"
+    navigate-back: "ui.button.click"
 
 discounts:
   # Permission node format: irshop.discount.<value>

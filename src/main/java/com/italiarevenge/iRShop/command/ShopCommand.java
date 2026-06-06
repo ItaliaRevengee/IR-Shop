@@ -99,6 +99,7 @@ public class ShopCommand implements CommandExecutor, TabCompleter {
     private void openShop(Player player, Shop shop) {
         player.sendMessage(msg.get("shop.opened",
                 Placeholder.parsed("shop-name", shop.getId())));
+        plugin.getConfigManager().playSound(player, "open");
         new CategoryListGui(player, shop).open();
     }
 
