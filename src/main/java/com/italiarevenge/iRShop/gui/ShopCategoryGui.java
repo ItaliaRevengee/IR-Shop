@@ -35,8 +35,7 @@ public class ShopCategoryGui extends PaginatedGui {
             @NotNull Player player,
             @NotNull Shop shop
     ) {
-        // Opens the first category by default; categories can be selected from the icon row
-        this(plugin, player, shop, shop.getCategories().isEmpty() ? null : shop.getCategories().get(0));
+        this(plugin, player, shop, shop.getCategories().get(0));
     }
 
     public ShopCategoryGui(

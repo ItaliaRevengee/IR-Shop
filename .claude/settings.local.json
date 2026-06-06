@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "PowerShell(gradle --version 2>&1)"
+      "PowerShell(gradle --version 2>&1)",
+      "Bash(.\\\\gradlew.bat shadowJar --no-configuration-cache)"
     ]
   }
 }

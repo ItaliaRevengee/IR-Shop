@@ -113,13 +113,21 @@ public class ShopCommand implements CommandExecutor, TabCompleter {
             plugin.getMessageManager().send(player, "shop.no-permission");
             return;
         }
-        // Ensure data is loaded before opening
         plugin.getCategoryService().loadCategories(shop)
-                .thenRun(() -> {
-                    for (var cat : shop.getCategories()) plugin.getItemService().loadItems(cat);
+                .thenCompose(cats -> {
+                    var futures = cats.stream()
+                            .map(cat -> plugin.getItemService().loadItems(cat))
+                            .toList();
+                    return java.util.concurrent.CompletableFuture.allOf(
+                            futures.toArray(new java.util.concurrent.CompletableFuture[0]));
                 })
-                .thenRun(() -> plugin.getServer().getScheduler().runTask(plugin, () ->
-                        new ShopCategoryGui(plugin, player, shop).open()));
+                .thenRun(() -> plugin.getServer().getScheduler().runTask(plugin, () -> {
+                    if (shop.getCategories().isEmpty()) {
+                        plugin.getMessageManager().send(player, "shop.no-categories");
+                        return;
+                    }
+                    new ShopCategoryGui(plugin, player, shop).open();
+                }));
     }
 
     private void openSearch(@NotNull Player player, @NotNull String query) {

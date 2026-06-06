@@ -11,6 +11,7 @@ shop:
   closed: "<gray>Shop closed."
   not-found: "<red>Shop '<white><name></white>' not found."
   no-permission: "<red>You don't have permission to access this shop."
+  no-categories: "<red>This shop has no categories yet. Ask an admin to add some."
   list-header: "<gold><bold>Available Shops</bold></gold>"
   list-entry: "  <yellow>• <white><name></white> <dark_gray>— <gray><description>"
   list-empty: "<gray>No shops available."
