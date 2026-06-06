@@ -219,7 +219,8 @@ public class ShopLoader {
                 .attributeModifiers(parseAttributeModifiers(e))
                 .customModelData(toInt(e.getOrDefault("custom-model-data", -1)))
                 .leatherColor(parseLeatherColor(e))
-                .pdcEntries(parsePdc(e));
+                .pdcEntries(parsePdc(e))
+                .variants(parseVariants(e, buy, sell));
 
         return builder.build();
     }
@@ -326,6 +327,29 @@ public class ShopLoader {
             String value = String.valueOf(map.getOrDefault("value", ""));
             if (key.isEmpty()) continue;
             result.add(new PdcEntry(ns, key, type, value));
+        }
+        return result;
+    }
+
+    private List<ShopItem> parseVariants(Map<String, Object> e, double parentBuy, double parentSell) {
+        Object raw = e.get("variants");
+        if (!(raw instanceof List<?> list) || list.isEmpty()) return List.of();
+
+        List<ShopItem> result = new ArrayList<>();
+        for (Object entry : list) {
+            if (entry instanceof String matName) {
+                // Simple string → material only, inherit parent buy/sell
+                Material varMat = parseMaterial(matName, null);
+                if (varMat != null) result.add(new ShopItem.Builder(varMat, parentBuy, parentSell).build());
+            } else if (entry instanceof Map<?, ?> varMap) {
+                @SuppressWarnings("unchecked")
+                Map<String, Object> varEntry = new HashMap<>((Map<String, Object>) varMap);
+                // Inherit parent buy/sell if not overridden
+                varEntry.putIfAbsent("buy",  parentBuy);
+                varEntry.putIfAbsent("sell", parentSell);
+                ShopItem varItem = parseItem(varEntry);
+                if (varItem != null) result.add(varItem);
+            }
         }
         return result;
     }

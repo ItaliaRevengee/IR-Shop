@@ -22,10 +22,10 @@ public class QuantityGui extends BaseGui {
     private static final int SLOT_BACK    = 22;
 
     private final ShopItem shopItem;
-    private final ItemListGui parent;
+    private final TransactionHost parent;
     private final MessageManager msg;
 
-    public QuantityGui(Player player, ShopItem shopItem, ItemListGui parent) {
+    public QuantityGui(Player player, ShopItem shopItem, TransactionHost parent) {
         super(player);
         this.shopItem = shopItem;
         this.parent   = parent;

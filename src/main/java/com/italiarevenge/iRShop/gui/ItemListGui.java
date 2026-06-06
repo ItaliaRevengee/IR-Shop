@@ -22,7 +22,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.Arrays;
 import java.util.List;
 
-public class ItemListGui extends BaseGui {
+public class ItemListGui extends BaseGui implements TransactionHost {
 
     private final Shop shop;
     private final ShopCategory category;
@@ -109,6 +109,13 @@ public class ItemListGui extends BaseGui {
 
         ShopItem shopItem = (slot >= 0 && slot < slotItems.length) ? slotItems[slot] : null;
         if (shopItem == null) return;
+
+        // Variant group → open sub-GUI for any click
+        if (shopItem.hasVariants()) {
+            playSound("page-turn");
+            new VariantGui(player, shopItem, this).open();
+            return;
+        }
 
         if (type == ClickType.LEFT || type == ClickType.SHIFT_LEFT) {
             if (!shopItem.isBuyable()) { playSound("error"); player.sendMessage(msg.get("purchase.not-for-sale")); return; }

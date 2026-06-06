@@ -70,6 +70,9 @@ public class ShopItem {
     // Full NBT preservation via Paper serialisation
     private final byte[] serializedBytes;  // null = build from fields above
 
+    // Variant group: if non-empty this item is a selector that opens a sub-GUI
+    private final List<ShopItem> variants;
+
     private ShopItem(Builder b) {
         this.material           = b.material;
         this.buyPrice           = b.buyPrice;
@@ -83,6 +86,7 @@ public class ShopItem {
         this.leatherColor       = b.leatherColor;
         this.pdcEntries         = Collections.unmodifiableList(b.pdcEntries);
         this.serializedBytes    = b.serializedBytes;
+        this.variants           = Collections.unmodifiableList(b.variants);
     }
 
     // ── accessors ───────────────────────────────────────────────────────────
@@ -102,6 +106,8 @@ public class ShopItem {
     public List<PdcEntry> getPdcEntries()       { return pdcEntries; }
     public byte[] getSerializedBytes()          { return serializedBytes; }
     public boolean isSerialized()               { return serializedBytes != null; }
+    public List<ShopItem> getVariants()         { return variants; }
+    public boolean hasVariants()                { return !variants.isEmpty(); }
 
     // ── builder ─────────────────────────────────────────────────────────────
 
@@ -120,6 +126,7 @@ public class ShopItem {
         private Color leatherColor = null;
         private List<PdcEntry> pdcEntries = List.of();
         private byte[] serializedBytes = null;
+        private List<ShopItem> variants = List.of();
 
         public Builder(Material material, double buyPrice, double sellPrice) {
             this.material  = material;
@@ -136,6 +143,7 @@ public class ShopItem {
         public Builder leatherColor(Color v)                   { leatherColor = v;         return this; }
         public Builder pdcEntries(List<PdcEntry> v)            { pdcEntries = v;           return this; }
         public Builder serializedBytes(byte[] v)               { serializedBytes = v;      return this; }
+        public Builder variants(List<ShopItem> v)              { variants = v;             return this; }
 
         public ShopItem build() { return new ShopItem(this); }
     }

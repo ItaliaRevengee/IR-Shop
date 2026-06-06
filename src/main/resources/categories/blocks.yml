@@ -37,33 +37,160 @@ items:
   - material: CLAY
     buy: 3.0
     sell: 1.5
+
+  # ── Logs (all wood types, same price) ─────────────────────
   - material: OAK_LOG
     buy: 5.0
     sell: 3.0
-  - material: BIRCH_LOG
-    buy: 5.0
-    sell: 3.0
-  - material: SPRUCE_LOG
-    buy: 5.0
-    sell: 3.0
-  - material: JUNGLE_LOG
-    buy: 6.0
-    sell: 3.5
-  - material: ACACIA_LOG
-    buy: 5.0
-    sell: 3.0
-  - material: DARK_OAK_LOG
-    buy: 5.0
-    sell: 3.0
+    name: "<green>Logs"
+    variants:
+      - OAK_LOG
+      - BIRCH_LOG
+      - SPRUCE_LOG
+      - JUNGLE_LOG
+      - ACACIA_LOG
+      - DARK_OAK_LOG
+      - CHERRY_LOG
+      - MANGROVE_LOG
+
+  # ── Planks (all wood types, same price) ───────────────────
   - material: OAK_PLANKS
     buy: 2.0
     sell: 1.0
-  - material: SPRUCE_PLANKS
-    buy: 2.0
-    sell: 1.0
+    name: "<green>Planks"
+    variants:
+      - OAK_PLANKS
+      - BIRCH_PLANKS
+      - SPRUCE_PLANKS
+      - JUNGLE_PLANKS
+      - ACACIA_PLANKS
+      - DARK_OAK_PLANKS
+      - CHERRY_PLANKS
+      - MANGROVE_PLANKS
+      - BAMBOO_PLANKS
+      - CRIMSON_PLANKS
+      - WARPED_PLANKS
+
   - material: GLASS
     buy: 3.0
     sell: 1.5
+
+  # ── Stained Glass (all 16 colors, same price) ─────────────
+  - material: WHITE_STAINED_GLASS
+    buy: 4.0
+    sell: 2.0
+    name: "<white>Stained Glass"
+    variants:
+      - WHITE_STAINED_GLASS
+      - ORANGE_STAINED_GLASS
+      - MAGENTA_STAINED_GLASS
+      - LIGHT_BLUE_STAINED_GLASS
+      - YELLOW_STAINED_GLASS
+      - LIME_STAINED_GLASS
+      - PINK_STAINED_GLASS
+      - GRAY_STAINED_GLASS
+      - LIGHT_GRAY_STAINED_GLASS
+      - CYAN_STAINED_GLASS
+      - PURPLE_STAINED_GLASS
+      - BLUE_STAINED_GLASS
+      - BROWN_STAINED_GLASS
+      - GREEN_STAINED_GLASS
+      - RED_STAINED_GLASS
+      - BLACK_STAINED_GLASS
+
+  # ── Wool (all 16 colors, same price) ──────────────────────
+  - material: WHITE_WOOL
+    buy: 3.0
+    sell: 1.5
+    name: "<white>Wool"
+    variants:
+      - WHITE_WOOL
+      - ORANGE_WOOL
+      - MAGENTA_WOOL
+      - LIGHT_BLUE_WOOL
+      - YELLOW_WOOL
+      - LIME_WOOL
+      - PINK_WOOL
+      - GRAY_WOOL
+      - LIGHT_GRAY_WOOL
+      - CYAN_WOOL
+      - PURPLE_WOOL
+      - BLUE_WOOL
+      - BROWN_WOOL
+      - GREEN_WOOL
+      - RED_WOOL
+      - BLACK_WOOL
+
+  # ── Concrete (all 16 colors, same price) ──────────────────
+  - material: WHITE_CONCRETE
+    buy: 5.0
+    sell: 2.5
+    name: "<white>Concrete"
+    variants:
+      - WHITE_CONCRETE
+      - ORANGE_CONCRETE
+      - MAGENTA_CONCRETE
+      - LIGHT_BLUE_CONCRETE
+      - YELLOW_CONCRETE
+      - LIME_CONCRETE
+      - PINK_CONCRETE
+      - GRAY_CONCRETE
+      - LIGHT_GRAY_CONCRETE
+      - CYAN_CONCRETE
+      - PURPLE_CONCRETE
+      - BLUE_CONCRETE
+      - BROWN_CONCRETE
+      - GREEN_CONCRETE
+      - RED_CONCRETE
+      - BLACK_CONCRETE
+
+  # ── Concrete Powder (all 16 colors, same price) ───────────
+  - material: WHITE_CONCRETE_POWDER
+    buy: 3.0
+    sell: 1.5
+    name: "<white>Concrete Powder"
+    variants:
+      - WHITE_CONCRETE_POWDER
+      - ORANGE_CONCRETE_POWDER
+      - MAGENTA_CONCRETE_POWDER
+      - LIGHT_BLUE_CONCRETE_POWDER
+      - YELLOW_CONCRETE_POWDER
+      - LIME_CONCRETE_POWDER
+      - PINK_CONCRETE_POWDER
+      - GRAY_CONCRETE_POWDER
+      - LIGHT_GRAY_CONCRETE_POWDER
+      - CYAN_CONCRETE_POWDER
+      - PURPLE_CONCRETE_POWDER
+      - BLUE_CONCRETE_POWDER
+      - BROWN_CONCRETE_POWDER
+      - GREEN_CONCRETE_POWDER
+      - RED_CONCRETE_POWDER
+      - BLACK_CONCRETE_POWDER
+
+  # ── Terracotta (plain + all 16 colors, same price) ────────
+  - material: TERRACOTTA
+    buy: 4.0
+    sell: 2.0
+    name: "<gold>Terracotta"
+    variants:
+      - TERRACOTTA
+      - WHITE_TERRACOTTA
+      - ORANGE_TERRACOTTA
+      - MAGENTA_TERRACOTTA
+      - LIGHT_BLUE_TERRACOTTA
+      - YELLOW_TERRACOTTA
+      - LIME_TERRACOTTA
+      - PINK_TERRACOTTA
+      - GRAY_TERRACOTTA
+      - LIGHT_GRAY_TERRACOTTA
+      - CYAN_TERRACOTTA
+      - PURPLE_TERRACOTTA
+      - BLUE_TERRACOTTA
+      - BROWN_TERRACOTTA
+      - GREEN_TERRACOTTA
+      - RED_TERRACOTTA
+      - BLACK_TERRACOTTA
+
   - material: BRICKS
     buy: 5.0
     sell: 2.5

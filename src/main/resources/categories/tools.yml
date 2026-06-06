@@ -7,54 +7,132 @@ icon: IRON_PICKAXE
 slot: 14
 
 items:
-  - material: WOODEN_PICKAXE
-    buy: 20.0
-    sell: 10.0
-  - material: STONE_PICKAXE
-    buy: 35.0
-    sell: 15.0
+  # ── Pickaxes (grouped by type, price per tier) ────────────
   - material: IRON_PICKAXE
     buy: 80.0
     sell: 40.0
-  - material: GOLDEN_PICKAXE
-    buy: 60.0
-    sell: 25.0
-  - material: DIAMOND_PICKAXE
-    buy: 300.0
-    sell: 150.0
-  - material: NETHERITE_PICKAXE
-    buy: 800.0
-    sell: 400.0
+    name: "<aqua>Pickaxe"
+    variants:
+      - material: WOODEN_PICKAXE
+        buy: 20.0
+        sell: 10.0
+      - material: STONE_PICKAXE
+        buy: 35.0
+        sell: 15.0
+      - material: IRON_PICKAXE
+        buy: 80.0
+        sell: 40.0
+      - material: GOLDEN_PICKAXE
+        buy: 60.0
+        sell: 25.0
+      - material: DIAMOND_PICKAXE
+        buy: 300.0
+        sell: 150.0
+      - material: NETHERITE_PICKAXE
+        buy: 800.0
+        sell: 400.0
+
+  # ── Swords ────────────────────────────────────────────────
   - material: IRON_SWORD
     buy: 70.0
     sell: 35.0
-  - material: DIAMOND_SWORD
-    buy: 250.0
-    sell: 125.0
-  - material: NETHERITE_SWORD
-    buy: 700.0
-    sell: 350.0
+    name: "<red>Sword"
+    variants:
+      - material: WOODEN_SWORD
+        buy: 15.0
+        sell: 7.0
+      - material: STONE_SWORD
+        buy: 30.0
+        sell: 13.0
+      - material: IRON_SWORD
+        buy: 70.0
+        sell: 35.0
+      - material: GOLDEN_SWORD
+        buy: 55.0
+        sell: 22.0
+      - material: DIAMOND_SWORD
+        buy: 250.0
+        sell: 125.0
+      - material: NETHERITE_SWORD
+        buy: 700.0
+        sell: 350.0
+
+  # ── Axes ──────────────────────────────────────────────────
   - material: IRON_AXE
     buy: 75.0
     sell: 35.0
-  - material: DIAMOND_AXE
-    buy: 270.0
-    sell: 135.0
+    name: "<green>Axe"
+    variants:
+      - material: WOODEN_AXE
+        buy: 18.0
+        sell: 8.0
+      - material: STONE_AXE
+        buy: 32.0
+        sell: 14.0
+      - material: IRON_AXE
+        buy: 75.0
+        sell: 35.0
+      - material: GOLDEN_AXE
+        buy: 58.0
+        sell: 23.0
+      - material: DIAMOND_AXE
+        buy: 270.0
+        sell: 135.0
+      - material: NETHERITE_AXE
+        buy: 750.0
+        sell: 375.0
+
+  # ── Shovels ───────────────────────────────────────────────
   - material: IRON_SHOVEL
     buy: 50.0
     sell: 25.0
-  - material: DIAMOND_SHOVEL
-    buy: 200.0
-    sell: 100.0
+    name: "<yellow>Shovel"
+    variants:
+      - material: WOODEN_SHOVEL
+        buy: 12.0
+        sell: 5.0
+      - material: STONE_SHOVEL
+        buy: 25.0
+        sell: 10.0
+      - material: IRON_SHOVEL
+        buy: 50.0
+        sell: 25.0
+      - material: GOLDEN_SHOVEL
+        buy: 40.0
+        sell: 16.0
+      - material: DIAMOND_SHOVEL
+        buy: 200.0
+        sell: 100.0
+      - material: NETHERITE_SHOVEL
+        buy: 600.0
+        sell: 300.0
+
+  # ── Hoes ──────────────────────────────────────────────────
   - material: IRON_HOE
     buy: 50.0
     sell: 25.0
-  - material: DIAMOND_HOE
-    buy: 200.0
-    sell: 100.0
-  - material: FISHING_ROD
-    buy: 30.0
-    sell: 15.0
+    name: "<dark_green>Hoe"
+    variants:
+      - material: WOODEN_HOE
+        buy: 12.0
+        sell: 5.0
+      - material: STONE_HOE
+        buy: 25.0
+        sell: 10.0
+      - material: IRON_HOE
+        buy: 50.0
+        sell: 25.0
+      - material: GOLDEN_HOE
+        buy: 40.0
+        sell: 16.0
+      - material: DIAMOND_HOE
+        buy: 200.0
+        sell: 100.0
+      - material: NETHERITE_HOE
+        buy: 600.0
+        sell: 300.0
+
+  # ── Ranged ────────────────────────────────────────────────
   - material: BOW
     buy: 40.0
     sell: 20.0
@@ -64,27 +142,47 @@ items:
   - material: TRIDENT
     buy: 500.0
     sell: 250.0
+
+  # ── Arrows ────────────────────────────────────────────────
   - material: ARROW
     buy: 1.0
     sell: 0.5
-  - material: SPECTRAL_ARROW
-    buy: 3.0
-    sell: 1.5
+    name: "<gray>Arrow"
+    variants:
+      - ARROW
+      - SPECTRAL_ARROW
+      - TIPPED_ARROW
+
+  # ── Utilities ─────────────────────────────────────────────
+  - material: FISHING_ROD
+    buy: 30.0
+    sell: 15.0
   - material: FLINT_AND_STEEL
     buy: 15.0
     sell: 7.0
   - material: SHEARS
     buy: 20.0
     sell: 10.0
+
+  # ── Buckets ───────────────────────────────────────────────
   - material: BUCKET
     buy: 30.0
     sell: 15.0
-  - material: WATER_BUCKET
-    buy: 35.0
-    sell: 17.0
-  - material: LAVA_BUCKET
-    buy: 40.0
-    sell: 20.0
+    name: "<blue>Bucket"
+    variants:
+      - material: BUCKET
+        buy: 30.0
+        sell: 15.0
+      - material: WATER_BUCKET
+        buy: 35.0
+        sell: 17.0
+      - material: LAVA_BUCKET
+        buy: 40.0
+        sell: 20.0
+      - material: POWDER_SNOW_BUCKET
+        buy: 25.0
+        sell: 12.0
+
   - material: COMPASS
     buy: 20.0
     sell: 10.0

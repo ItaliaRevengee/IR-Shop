@@ -179,6 +179,23 @@ public final class ItemBuilder {
         var msg     = IRShop.get().getMessageManager();
         var economy = IRShop.get().getEconomyManager();
 
+        if (shopItem.hasVariants()) {
+            // Show price range from parent item, then a "choose variant" hint
+            if (shopItem.isBuyable()) {
+                lore.addAll(msg.getList("gui.item-buy-lore-append",
+                        Placeholder.parsed("buy-price", economy.format(shopItem.getBuyPrice())),
+                        Placeholder.parsed("currency",  "money")));
+            }
+            if (shopItem.isSellable()) {
+                lore.addAll(msg.getList("gui.item-sell-lore-append",
+                        Placeholder.parsed("sell-price", economy.format(shopItem.getSellPrice())),
+                        Placeholder.parsed("currency",   "money")));
+            }
+            String hint = msg.raw().getString("gui.item-variants-hint", "<yellow>Click <gray>to choose a variant");
+            lore.add(MessageManager.parse(hint));
+            return;
+        }
+
         if (shopItem.isBuyable()) {
             lore.addAll(msg.getList("gui.item-buy-lore-append",
                     Placeholder.parsed("buy-price", economy.format(shopItem.getBuyPrice())),

@@ -7,78 +7,107 @@ icon: IRON_CHESTPLATE
 slot: 15
 
 items:
-  - material: LEATHER_HELMET
-    buy: 15.0
-    sell: 7.0
-  - material: LEATHER_CHESTPLATE
-    buy: 25.0
-    sell: 12.0
-  - material: LEATHER_LEGGINGS
-    buy: 20.0
-    sell: 10.0
-  - material: LEATHER_BOOTS
-    buy: 15.0
-    sell: 7.0
-  - material: CHAINMAIL_HELMET
-    buy: 40.0
-    sell: 18.0
-  - material: CHAINMAIL_CHESTPLATE
-    buy: 65.0
-    sell: 30.0
-  - material: CHAINMAIL_LEGGINGS
-    buy: 55.0
-    sell: 25.0
-  - material: CHAINMAIL_BOOTS
-    buy: 40.0
-    sell: 18.0
+  # ── Helmets (grouped by slot, price per tier) ─────────────
   - material: IRON_HELMET
     buy: 60.0
     sell: 30.0
+    name: "<gray>Helmet"
+    variants:
+      - material: LEATHER_HELMET
+        buy: 15.0
+        sell: 7.0
+      - material: CHAINMAIL_HELMET
+        buy: 40.0
+        sell: 18.0
+      - material: IRON_HELMET
+        buy: 60.0
+        sell: 30.0
+      - material: GOLDEN_HELMET
+        buy: 50.0
+        sell: 20.0
+      - material: DIAMOND_HELMET
+        buy: 300.0
+        sell: 150.0
+      - material: NETHERITE_HELMET
+        buy: 800.0
+        sell: 400.0
+
+  # ── Chestplates ───────────────────────────────────────────
   - material: IRON_CHESTPLATE
     buy: 100.0
     sell: 50.0
+    name: "<gray>Chestplate"
+    variants:
+      - material: LEATHER_CHESTPLATE
+        buy: 25.0
+        sell: 12.0
+      - material: CHAINMAIL_CHESTPLATE
+        buy: 65.0
+        sell: 30.0
+      - material: IRON_CHESTPLATE
+        buy: 100.0
+        sell: 50.0
+      - material: GOLDEN_CHESTPLATE
+        buy: 80.0
+        sell: 35.0
+      - material: DIAMOND_CHESTPLATE
+        buy: 500.0
+        sell: 250.0
+      - material: NETHERITE_CHESTPLATE
+        buy: 1200.0
+        sell: 600.0
+
+  # ── Leggings ──────────────────────────────────────────────
   - material: IRON_LEGGINGS
     buy: 80.0
     sell: 40.0
+    name: "<gray>Leggings"
+    variants:
+      - material: LEATHER_LEGGINGS
+        buy: 20.0
+        sell: 10.0
+      - material: CHAINMAIL_LEGGINGS
+        buy: 55.0
+        sell: 25.0
+      - material: IRON_LEGGINGS
+        buy: 80.0
+        sell: 40.0
+      - material: GOLDEN_LEGGINGS
+        buy: 65.0
+        sell: 28.0
+      - material: DIAMOND_LEGGINGS
+        buy: 400.0
+        sell: 200.0
+      - material: NETHERITE_LEGGINGS
+        buy: 1000.0
+        sell: 500.0
+
+  # ── Boots ─────────────────────────────────────────────────
   - material: IRON_BOOTS
     buy: 60.0
     sell: 30.0
-  - material: GOLDEN_HELMET
-    buy: 50.0
-    sell: 20.0
-  - material: GOLDEN_CHESTPLATE
-    buy: 80.0
-    sell: 35.0
-  - material: GOLDEN_LEGGINGS
-    buy: 65.0
-    sell: 28.0
-  - material: GOLDEN_BOOTS
-    buy: 50.0
-    sell: 20.0
-  - material: DIAMOND_HELMET
-    buy: 300.0
-    sell: 150.0
-  - material: DIAMOND_CHESTPLATE
-    buy: 500.0
-    sell: 250.0
-  - material: DIAMOND_LEGGINGS
-    buy: 400.0
-    sell: 200.0
-  - material: DIAMOND_BOOTS
-    buy: 300.0
-    sell: 150.0
-  - material: NETHERITE_HELMET
-    buy: 800.0
-    sell: 400.0
-  - material: NETHERITE_CHESTPLATE
-    buy: 1200.0
-    sell: 600.0
-  - material: NETHERITE_LEGGINGS
-    buy: 1000.0
-    sell: 500.0
-  - material: NETHERITE_BOOTS
-    buy: 800.0
-    sell: 400.0
+    name: "<gray>Boots"
+    variants:
+      - material: LEATHER_BOOTS
+        buy: 15.0
+        sell: 7.0
+      - material: CHAINMAIL_BOOTS
+        buy: 40.0
+        sell: 18.0
+      - material: IRON_BOOTS
+        buy: 60.0
+        sell: 30.0
+      - material: GOLDEN_BOOTS
+        buy: 50.0
+        sell: 20.0
+      - material: DIAMOND_BOOTS
+        buy: 300.0
+        sell: 150.0
+      - material: NETHERITE_BOOTS
+        buy: 800.0
+        sell: 400.0
+
+  # ── Unique items ──────────────────────────────────────────
   - material: SHIELD
     buy: 60.0
     sell: 30.0

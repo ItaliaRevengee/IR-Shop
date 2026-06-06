@@ -92,3 +92,6 @@ gui:
     - "<yellow>Shift-right-click <gray>to sell all"
 
   item-not-for-sale: "<red>✗ Not for sale"
+
+  variant-gui-title: "<dark_gray>Choose <yellow>Variant"
+  item-variants-hint: "<yellow>Click <gray>to choose a variant"
