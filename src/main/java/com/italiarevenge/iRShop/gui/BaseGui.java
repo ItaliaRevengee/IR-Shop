@@ -1,5 +1,6 @@
 package com.italiarevenge.iRShop.gui;
 
+import com.italiarevenge.iRShop.IRShop;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -17,4 +18,8 @@ public abstract class BaseGui {
     public abstract void handleClick(InventoryClickEvent event);
 
     public Inventory getInventory() { return inventory; }
+
+    protected void playSound(String key) {
+        IRShop.get().getConfigManager().playSound(player, key);
+    }
 }

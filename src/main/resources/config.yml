@@ -16,12 +16,12 @@ shop:
   default-layout: "classic"
   sounds:
     enabled: true
-    open: "BLOCK_CHEST_OPEN"
-    close: "BLOCK_CHEST_CLOSE"
-    purchase: "ENTITY_EXPERIENCE_ORB_PICKUP"
-    sell: "ENTITY_VILLAGER_TRADE"
-    error: "ENTITY_VILLAGER_NO"
-    page-turn: "ITEM_BOOK_PAGE_TURN"
+    open: "block.chest.open"
+    close: "block.chest.close"
+    purchase: "entity.experience_orb.pickup"
+    sell: "entity.villager.trade"
+    error: "entity.villager.no"
+    page-turn: "item.book.page_turn"
 
 discounts:
   # Permission node format: irshop.discount.<value>

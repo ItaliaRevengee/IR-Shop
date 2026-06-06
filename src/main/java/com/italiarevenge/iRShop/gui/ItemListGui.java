@@ -52,6 +52,7 @@ public class ItemListGui extends BaseGui {
                 MessageManager.parse(category.getDisplayName()));
         render();
         player.openInventory(inventory);
+        playSound("open");
         GuiListener.register(player, this);
     }
 
@@ -101,16 +102,16 @@ public class ItemListGui extends BaseGui {
         int slot       = event.getRawSlot();
         ClickType type = event.getClick();
 
-        if (slot == layout.slotBack)  { new CategoryListGui(player, shop).open(); return; }
-        if (slot == layout.slotClose) { player.closeInventory(); return; }
-        if (slot == layout.slotPrev)  { page--; render(); return; }
-        if (slot == layout.slotNext)  { page++; render(); return; }
+        if (slot == layout.slotBack)  { playSound("page-turn"); new CategoryListGui(player, shop).open(); return; }
+        if (slot == layout.slotClose) { playSound("close"); player.closeInventory(); return; }
+        if (slot == layout.slotPrev)  { playSound("page-turn"); page--; render(); return; }
+        if (slot == layout.slotNext)  { playSound("page-turn"); page++; render(); return; }
 
         ShopItem shopItem = (slot >= 0 && slot < slotItems.length) ? slotItems[slot] : null;
         if (shopItem == null) return;
 
         if (type == ClickType.LEFT || type == ClickType.SHIFT_LEFT) {
-            if (!shopItem.isBuyable()) { player.sendMessage(msg.get("purchase.not-for-sale")); return; }
+            if (!shopItem.isBuyable()) { playSound("error"); player.sendMessage(msg.get("purchase.not-for-sale")); return; }
             // Shift+click = quick-buy 1 (skip quantity GUI)
             if (type == ClickType.SHIFT_LEFT && config.isQuickBuy()) {
                 executeBuy(shopItem, 1);
@@ -118,10 +119,10 @@ public class ItemListGui extends BaseGui {
                 new QuantityGui(player, shopItem, this).open();
             }
         } else if (type == ClickType.RIGHT) {
-            if (!shopItem.isSellable()) { player.sendMessage(msg.get("sell.not-sellable")); return; }
+            if (!shopItem.isSellable()) { playSound("error"); player.sendMessage(msg.get("sell.not-sellable")); return; }
             executeSell(shopItem, 1);
         } else if (type == ClickType.SHIFT_RIGHT) {
-            if (!shopItem.isSellable()) { player.sendMessage(msg.get("sell.not-sellable")); return; }
+            if (!shopItem.isSellable()) { playSound("error"); player.sendMessage(msg.get("sell.not-sellable")); return; }
             executeSell(shopItem, ItemMatcher.count(player, shopItem));
         }
     }
@@ -133,6 +134,7 @@ public class ItemListGui extends BaseGui {
 
         double total = shopItem.getBuyPrice() * amount;
         if (!economy.has(player, total)) {
+            playSound("error");
             player.sendMessage(msg.get("purchase.insufficient-funds",
                     Placeholder.parsed("currency", "money"),
                     Placeholder.parsed("needed",   economy.format(total - economy.getBalance(player)))));
@@ -143,7 +145,7 @@ public class ItemListGui extends BaseGui {
         for (ItemStack s : player.getInventory().getStorageContents()) {
             if (s == null || s.getType() == Material.AIR) { hasSpace = true; break; }
         }
-        if (!hasSpace) { player.sendMessage(msg.get("purchase.inventory-full")); return; }
+        if (!hasSpace) { playSound("error"); player.sendMessage(msg.get("purchase.inventory-full")); return; }
 
         economy.withdraw(player, total);
         // Give the "clean" item (no price lore overlay) in the correct quantity
@@ -159,6 +161,7 @@ public class ItemListGui extends BaseGui {
             remaining -= stackSize;
         }
 
+        playSound("purchase");
         player.sendMessage(msg.get("purchase.success",
                 Placeholder.parsed("amount",    String.valueOf(amount)),
                 Placeholder.parsed("item-name", itemDisplayName(shopItem)),
@@ -171,11 +174,12 @@ public class ItemListGui extends BaseGui {
         // ItemMatcher handles both simple material matching and PDC-filtered matching
         int available = ItemMatcher.count(player, shopItem);
         int sellAmount = Math.min(amount, available);
-        if (sellAmount <= 0) { player.sendMessage(msg.get("sell.no-items")); return; }
+        if (sellAmount <= 0) { playSound("error"); player.sendMessage(msg.get("sell.no-items")); return; }
 
         double total = shopItem.getSellPrice() * sellAmount;
         ItemMatcher.remove(player, shopItem, sellAmount);
         economy.deposit(player, total);
+        playSound("sell");
         player.sendMessage(msg.get("sell.success",
                 Placeholder.parsed("amount",    String.valueOf(sellAmount)),
                 Placeholder.parsed("item-name", itemDisplayName(shopItem)),

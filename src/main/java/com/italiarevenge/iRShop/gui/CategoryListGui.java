@@ -48,6 +48,7 @@ public class CategoryListGui extends BaseGui {
         }
 
         player.openInventory(inventory);
+        playSound("open");
         GuiListener.register(player, this);
     }
 
@@ -56,12 +57,14 @@ public class CategoryListGui extends BaseGui {
         int slot = event.getRawSlot();
 
         if (slot == layout.slotClose) {
+            playSound("close");
             player.closeInventory();
             return;
         }
 
         for (ShopCategory cat : shop.getCategories()) {
             if (cat.getSlot() == slot) {
+                playSound("page-turn");
                 new ItemListGui(player, shop, cat, 0).open();
                 return;
             }

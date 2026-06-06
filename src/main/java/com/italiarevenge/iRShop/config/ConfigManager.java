@@ -1,7 +1,13 @@
 package com.italiarevenge.iRShop.config;
 
 import com.italiarevenge.iRShop.IRShop;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
+
+import java.util.List;
 
 public class ConfigManager {
 
@@ -55,6 +61,32 @@ public class ConfigManager {
 
     public double getMaxDiscount() {
         return config.getDouble("discounts.max-discount", 90.0);
+    }
+
+    private static final List<String> SOUND_KEYS =
+            List.of("open", "close", "purchase", "sell", "error", "page-turn");
+
+    public void playSound(Player player, String key) {
+        if (!isSoundsEnabled()) return;
+        String name = config.getString("shop.sounds." + key, "");
+        if (name.isBlank()) return;
+        Sound sound = resolveSound(name);
+        if (sound == null) return;
+        stopShopSounds(player);
+        player.playSound(player.getLocation(), sound, 1f, 1f);
+    }
+
+    private void stopShopSounds(Player player) {
+        for (String k : SOUND_KEYS) {
+            String name = config.getString("shop.sounds." + k, "");
+            if (name.isBlank()) continue;
+            Sound sound = resolveSound(name);
+            if (sound != null) player.stopSound(sound);
+        }
+    }
+
+    private Sound resolveSound(String name) {
+        return Registry.SOUNDS.get(NamespacedKey.minecraft(name.toLowerCase()));
     }
 
     public FileConfiguration raw() { return config; }

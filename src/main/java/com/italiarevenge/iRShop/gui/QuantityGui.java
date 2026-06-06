@@ -56,6 +56,7 @@ public class QuantityGui extends BaseGui {
         inventory.setItem(SLOT_BACK, navItem(Material.BARRIER, msg.getRaw("gui.back-name")));
 
         player.openInventory(inventory);
+        playSound("open");
         GuiListener.register(player, this);
     }
 
@@ -68,6 +69,7 @@ public class QuantityGui extends BaseGui {
         int slot = event.getRawSlot();
 
         if (slot == SLOT_BACK) {
+            playSound("page-turn");
             parent.open();
             return;
         }
@@ -76,8 +78,6 @@ public class QuantityGui extends BaseGui {
             if (slot == QTY_SLOTS[i]) {
                 int qty = QUANTITIES[i];
                 parent.executeBuy(shopItem, qty);
-                // After buy: stay on quantity GUI so player can buy again
-                open();
                 return;
             }
         }
