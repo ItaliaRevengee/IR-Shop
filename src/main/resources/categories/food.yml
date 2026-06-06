@@ -2,89 +2,71 @@
 #  IR-Shop — Category: Food
 # ============================================================
 display-name: "<yellow>Food"
-description: "Food, crops and consumables"
-icon: BREAD
+description: "Cooked food, fish and crafted consumables"
+icon: COOKED_BEEF
 slot: 13
 
 items:
-  - material: APPLE
-    buy: 5.0
-    sell: 2.5
-  - material: GOLDEN_APPLE
-    buy: 50.0
-    sell: -1
-  - material: ENCHANTED_GOLDEN_APPLE
-    buy: 1000.0
-    sell: -1
-  - material: BREAD
-    buy: 3.0
-    sell: 1.5
-  - material: WHEAT
-    buy: 1.5
-    sell: 0.8
+  - material: SALMON
+    buy: 350.0
+    sell: 3.0
+  - material: COOKED_SALMON
+    buy: 450.0
+    sell: 4.0
+  - material: BAKED_POTATO
+    buy: 250.0
+    sell: 2.0
   - material: COOKED_BEEF
-    buy: 8.0
+    buy: 450.0
     sell: 4.0
   - material: BEEF
-    buy: 5.0
-    sell: 2.5
-  - material: COOKED_PORKCHOP
-    buy: 8.0
-    sell: 4.0
+    buy: 300.0
+    sell: 3.0
   - material: COOKED_CHICKEN
-    buy: 6.0
+    buy: 400.0
     sell: 3.0
-  - material: COOKED_MUTTON
-    buy: 6.0
-    sell: 3.0
-  - material: COOKED_RABBIT
-    buy: 7.0
-    sell: 3.5
-  - material: COOKED_SALMON
-    buy: 7.0
-    sell: 3.5
-  - material: COOKED_COD
-    buy: 5.0
-    sell: 2.5
-  - material: BAKED_POTATO
-    buy: 4.0
+  - material: CHICKEN
+    buy: 250.0
     sell: 2.0
-  - material: POTATO
-    buy: 2.0
-    sell: 1.0
-  - material: CARROT
-    buy: 2.0
-    sell: 1.0
-  - material: PUMPKIN_PIE
-    buy: 6.0
+  - material: COOKED_PORKCHOP
+    buy: 450.0
     sell: 3.0
-  - material: MELON_SLICE
-    buy: 2.0
+  - material: PORKCHOP
+    buy: 300.0
+    sell: 2.0
+  - material: COOKED_MUTTON
+    buy: 400.0
+    sell: 3.0
+  - material: MUTTON
+    buy: 250.0
+    sell: 2.0
+  - material: COD
+    buy: 300.0
+    sell: 2.0
+  - material: COOKED_COD
+    buy: 400.0
+    sell: 3.0
+  - material: TROPICAL_FISH
+    buy: 500.0
+    sell: 5.0
+  - material: BREAD
+    buy: 150.0
     sell: 1.0
-  - material: COOKIE
-    buy: 1.0
-    sell: 0.5
-  - material: CAKE
-    buy: 30.0
-    sell: 15.0
   - material: MUSHROOM_STEW
-    buy: 8.0
-    sell: 4.0
+    buy: 600.0
+    sell: 5.0
   - material: BEETROOT_SOUP
-    buy: 8.0
-    sell: 4.0
-  - material: RABBIT_STEW
-    buy: 12.0
-    sell: 6.0
-  - material: SUGAR
-    buy: 2.0
-    sell: 1.0
-  - material: SUGAR_CANE
-    buy: 1.5
-    sell: 0.8
-  - material: KELP
-    buy: 1.0
-    sell: 0.5
-  - material: DRIED_KELP
-    buy: 1.5
-    sell: 0.8
+    buy: 650.0
+    sell: 5.0
+  - material: COOKIE
+    buy: 80.0
+    sell: 0.3
+  - material: CAKE
+    buy: 2000.0
+    sell: 8.0
+  - material: PUMPKIN_PIE
+    buy: 800.0
+    sell: 2.5
+  - material: GOLDEN_CARROT
+    buy: 2500.0
+    sell: 3.5

@@ -1,0 +1,75 @@
+# ============================================================
+#  IR-Shop — Category: Farming
+# ============================================================
+display-name: "<green>Farming"
+description: "Crops, plants and farm produce"
+icon: WHEAT
+slot: 16
+
+items:
+  - material: WHEAT
+    buy: 300.0
+    sell: 0.5
+  - material: WHEAT_SEEDS
+    buy: 150.0
+    sell: 0.1
+  - material: POTATO
+    buy: 700.0
+    sell: 1.5
+  - material: CARROT
+    buy: 700.0
+    sell: 1.5
+  - material: BEETROOT
+    buy: 300.0
+    sell: 1.0
+  - material: BEETROOT_SEEDS
+    buy: 150.0
+    sell: 0.2
+  - material: MELON
+    buy: 3000.0
+    sell: 1.0
+  - material: MELON_SEEDS
+    buy: 300.0
+    sell: 0.5
+  - material: PUMPKIN
+    buy: 3000.0
+    sell: 2.0
+  - material: PUMPKIN_SEEDS
+    buy: 300.0
+    sell: 0.5
+  - material: SUGAR_CANE
+    buy: 1200.0
+    sell: 1.0
+  - material: BAMBOO
+    buy: 200.0
+    sell: 0.3
+  - material: CACTUS
+    buy: 300.0
+    sell: 0.3
+  - material: KELP
+    buy: 200.0
+    sell: 0.1
+  - material: NETHER_WART
+    buy: 1500.0
+    sell: 1.5
+  - material: COCOA_BEANS
+    buy: 500.0
+    sell: 1.0
+  - material: BROWN_MUSHROOM
+    buy: 600.0
+    sell: 2.0
+  - material: EGG
+    buy: 400.0
+    sell: 0.5
+  - material: HONEY_BOTTLE
+    buy: 300.0
+    sell: 5.0
+  - material: SWEET_BERRIES
+    buy: 1200.0
+    sell: 1.5
+  - material: APPLE
+    buy: 3000.0
+    sell: 10.0
+  - material: GOLDEN_APPLE
+    buy: 8000.0
+    sell: 30.0

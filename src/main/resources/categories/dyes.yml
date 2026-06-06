@@ -1,0 +1,58 @@
+# ============================================================
+#  IR-Shop — Category: Dyes
+# ============================================================
+display-name: "<light_purple>Dyes"
+description: "Dyes and flowers"
+icon: WHITE_DYE
+slot: 22
+
+items:
+  # ── Dyes (all 16 colors, same price) ──────────────────────
+  - material: WHITE_DYE
+    buy: 10.0
+    sell: 0.5
+    name: "<white>Dye"
+    variants:
+      - WHITE_DYE
+      - LIGHT_GRAY_DYE
+      - GRAY_DYE
+      - BLACK_DYE
+      - BROWN_DYE
+      - RED_DYE
+      - ORANGE_DYE
+      - YELLOW_DYE
+      - LIME_DYE
+      - GREEN_DYE
+      - CYAN_DYE
+      - LIGHT_BLUE_DYE
+      - BLUE_DYE
+      - PURPLE_DYE
+      - MAGENTA_DYE
+      - PINK_DYE
+
+  # ── Flowers (all common flowers, same price) ───────────────
+  - material: DANDELION
+    buy: 10.0
+    sell: 0.5
+    name: "<yellow>Flower"
+    variants:
+      - DANDELION
+      - POPPY
+      - BLUE_ORCHID
+      - ALLIUM
+      - AZURE_BLUET
+      - RED_TULIP
+      - ORANGE_TULIP
+      - WHITE_TULIP
+      - PINK_TULIP
+      - OXEYE_DAISY
+      - CORNFLOWER
+      - LILY_OF_THE_VALLEY
+      - SUNFLOWER
+      - LILAC
+      - ROSE_BUSH
+      - PEONY
+
+  - material: WITHER_ROSE
+    buy: 100.0
+    sell: 5.0

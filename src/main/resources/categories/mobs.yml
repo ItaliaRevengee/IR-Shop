@@ -1,0 +1,66 @@
+# ============================================================
+#  IR-Shop — Category: Mobs
+# ============================================================
+display-name: "<dark_green>Mobs"
+description: "Mob drops and creature resources"
+icon: BONE
+slot: 19
+
+items:
+  - material: BONE
+    buy: 300.0
+    sell: 2.0
+  - material: BONE_MEAL
+    buy: 80.0
+    sell: 0.5
+  - material: ARROW
+    buy: 80.0
+    sell: 0.5
+  - material: FEATHER
+    buy: 30.0
+    sell: 0.5
+  - material: LEATHER
+    buy: 250.0
+    sell: 3.0
+  - material: STRING
+    buy: 50.0
+    sell: 1.0
+  - material: GUNPOWDER
+    buy: 350.0
+    sell: 3.0
+  - material: SLIME_BALL
+    buy: 200.0
+    sell: 3.0
+  - material: SPIDER_EYE
+    buy: 200.0
+    sell: 2.0
+  - material: FERMENTED_SPIDER_EYE
+    buy: 400.0
+    sell: 3.0
+  - material: ROTTEN_FLESH
+    buy: 8.0
+    sell: 0.5
+  - material: ENDER_PEARL
+    buy: 400.0
+    sell: 1.0
+  - material: INK_SAC
+    buy: 40.0
+    sell: 1.0
+  - material: GLOW_INK_SAC
+    buy: 8.0
+    sell: 0.5
+  - material: PHANTOM_MEMBRANE
+    buy: 850.0
+    sell: 3.0
+  - material: MAGMA_CREAM
+    buy: 150.0
+    sell: 2.0
+  - material: RABBIT_HIDE
+    buy: 35.0
+    sell: 2.0
+  - material: PRISMARINE_CRYSTALS
+    buy: 50.0
+    sell: 1.0
+  - material: PRISMARINE_SHARD
+    buy: 500.0
+    sell: 1.5

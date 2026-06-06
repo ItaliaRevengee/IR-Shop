@@ -1,0 +1,24 @@
+# ============================================================
+#  IR-Shop — Category: End
+# ============================================================
+display-name: "<dark_purple>End"
+description: "End dimension resources"
+icon: ENDER_PEARL
+slot: 21
+
+items:
+  - material: END_STONE
+    buy: 20.0
+    sell: 0.5
+  - material: PURPUR_BLOCK
+    buy: 50.0
+    sell: 1.5
+  - material: CHORUS_FRUIT
+    buy: 20.0
+    sell: 0.5
+  - material: END_ROD
+    buy: 400.0
+    sell: 5.0
+  - material: SHULKER_SHELL
+    buy: -1.0
+    sell: 30.0
