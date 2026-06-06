@@ -56,7 +56,6 @@ public class QuantityGui extends BaseGui {
         inventory.setItem(SLOT_BACK, navItem(Material.BARRIER, msg.getRaw("gui.back-name")));
 
         player.openInventory(inventory);
-        playSound("open");
         GuiListener.register(player, this);
     }
 
@@ -69,7 +68,7 @@ public class QuantityGui extends BaseGui {
         int slot = event.getRawSlot();
 
         if (slot == SLOT_BACK) {
-            playSound("page-turn");
+            playSound("navigate-back");
             parent.open();
             return;
         }

@@ -64,7 +64,7 @@ public class ConfigManager {
     }
 
     private static final List<String> SOUND_KEYS =
-            List.of("open", "close", "purchase", "sell", "error", "page-turn");
+            List.of("open", "close", "purchase", "sell", "error", "page-turn", "navigate-back");
 
     public void playSound(Player player, String key) {
         if (!isSoundsEnabled()) return;
