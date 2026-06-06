@@ -118,11 +118,11 @@ public class ItemListGui extends BaseGui {
                 player.sendMessage(msg.get("purchase.not-for-sale"));
                 return;
             }
-            boolean quickBuy = type == ClickType.SHIFT_LEFT && config.isQuickBuy();
-            if (config.isConfirmPurchases() && !quickBuy) {
-                new ConfirmGui(player, shop, category, shopItem, this).open();
-            } else {
+            // Shift+click = quick-buy 1 (skip quantity GUI)
+            if (type == ClickType.SHIFT_LEFT && config.isQuickBuy()) {
                 executeBuy(shopItem, 1);
+            } else {
+                new QuantityGui(player, shop, category, shopItem, this).open();
             }
         } else if (type == ClickType.RIGHT) {
             if (!shopItem.isSellable()) { player.sendMessage(msg.get("sell.not-sellable")); return; }

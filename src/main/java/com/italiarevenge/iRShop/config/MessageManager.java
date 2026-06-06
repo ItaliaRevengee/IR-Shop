@@ -34,13 +34,24 @@ public class MessageManager {
             plugin.saveResource("messages.yml", false);
         }
         messages = YamlConfiguration.loadConfiguration(file);
+        mergeDefaults(file);
+    }
+
+    /** Adds any missing keys from the bundled messages.yml without touching existing values. */
+    private void mergeDefaults(File file) {
         try (InputStream in = plugin.getResource("messages.yml")) {
-            if (in != null) {
-                YamlConfiguration defaults = YamlConfiguration.loadConfiguration(
-                        new InputStreamReader(in, StandardCharsets.UTF_8));
-                messages.setDefaults(defaults);
-            }
-        } catch (IOException ignored) {}
+            if (in == null) return;
+            YamlConfiguration defaults = YamlConfiguration.loadConfiguration(
+                    new InputStreamReader(in, StandardCharsets.UTF_8));
+            messages.setDefaults(defaults);
+            messages.options().copyDefaults(true);
+            messages.save(file);
+            // Reload from disk so the in-memory view matches the saved file
+            messages = YamlConfiguration.loadConfiguration(file);
+            messages.setDefaults(defaults);
+        } catch (IOException e) {
+            plugin.getLogger().warning("Failed to merge messages.yml defaults: " + e.getMessage());
+        }
     }
 
     private String prefix() {

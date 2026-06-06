@@ -40,6 +40,15 @@ confirm-gui:
   cancel-lore:
     - "<red>Click to cancel"
 
+quantity-gui:
+  title: "<dark_gray>Select <yellow>Quantity"
+  button-name: "<yellow><bold>x<qty></bold>"
+  button-lore:
+    - "<gray>Amount: <white><qty>"
+    - "<gray>Total:  <green><price>"
+    - ""
+    - "<yellow>Click <gray>to buy"
+
 admin:
   reloaded: "<green>IR-Shop reloaded in <white><ms>ms</white>."
   reload-error: "<red>Reload failed — check console for details."

@@ -12,11 +12,29 @@ public class ConfigManager {
         this.plugin = plugin;
         plugin.saveDefaultConfig();
         config = plugin.getConfig();
+        mergeDefaults();
     }
 
     public void reload() {
         plugin.reloadConfig();
         config = plugin.getConfig();
+        mergeDefaults();
+    }
+
+    /** Adds any missing keys from the bundled config.yml without touching existing values. */
+    private void mergeDefaults() {
+        try (java.io.InputStream in = plugin.getResource("config.yml")) {
+            if (in == null) return;
+            org.bukkit.configuration.file.YamlConfiguration defaults =
+                    org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(
+                            new java.io.InputStreamReader(in, java.nio.charset.StandardCharsets.UTF_8));
+            config.setDefaults(defaults);
+            config.options().copyDefaults(true);
+            plugin.saveConfig();
+            config = plugin.getConfig();
+        } catch (java.io.IOException e) {
+            plugin.getLogger().warning("Failed to merge config.yml defaults: " + e.getMessage());
+        }
     }
 
     public boolean isConfirmPurchases() {
