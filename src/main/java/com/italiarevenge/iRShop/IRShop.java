@@ -6,6 +6,7 @@ import com.italiarevenge.iRShop.config.ConfigManager;
 import com.italiarevenge.iRShop.config.MessageManager;
 import com.italiarevenge.iRShop.economy.EconomyManager;
 import com.italiarevenge.iRShop.gui.GuiListener;
+import com.italiarevenge.iRShop.gui.admin.AdminChatInputListener;
 import com.italiarevenge.iRShop.loader.LayoutLoader;
 import com.italiarevenge.iRShop.loader.ShopLoader;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -38,6 +39,7 @@ public final class IRShop extends JavaPlugin {
         shopLoader.loadAll();
 
         getServer().getPluginManager().registerEvents(new GuiListener(), this);
+        getServer().getPluginManager().registerEvents(new AdminChatInputListener(), this);
 
         getCommand("shop").setExecutor(new ShopCommand(this));
         getCommand("shop").setTabCompleter(new ShopCommand(this));

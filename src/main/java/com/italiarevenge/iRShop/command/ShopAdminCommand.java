@@ -2,6 +2,7 @@ package com.italiarevenge.iRShop.command;
 
 import com.italiarevenge.iRShop.IRShop;
 import com.italiarevenge.iRShop.config.MessageManager;
+import com.italiarevenge.iRShop.gui.admin.AdminShopListGui;
 import com.italiarevenge.iRShop.util.ItemBuilder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -21,7 +22,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
@@ -53,6 +53,13 @@ public class ShopAdminCommand implements CommandExecutor, TabCompleter {
                 long ms = System.currentTimeMillis() - start;
                 sender.sendMessage(msg.get("admin.reloaded",
                         Placeholder.parsed("ms", String.valueOf(ms))));
+            }
+            case "gui" -> {
+                if (!(sender instanceof Player player)) {
+                    sender.sendMessage(msg.get("general.player-only"));
+                    return true;
+                }
+                new AdminShopListGui(player).open();
             }
             case "serialize" -> handleSerialize(sender);
             case "additem"   -> handleAddItem(sender, args);
@@ -178,6 +185,8 @@ public class ShopAdminCommand implements CommandExecutor, TabCompleter {
 
     private void sendHelp(CommandSender sender) {
         sender.sendMessage(msg.getRaw("help.header"));
+        sender.sendMessage(MessageManager.parse(
+                "  <yellow>/shopadmin gui</yellow> <dark_gray>—</dark_gray> <gray>Apre la GUI di amministrazione degli shop"));
         sender.sendMessage(msg.getRaw("help.admin-reload"));
         sender.sendMessage(MessageManager.parse(
                 "  <yellow>/shopadmin serialize</yellow> <dark_gray>—</dark_gray> <gray>Copy Base64 of held item (for custom NBT shop items)"));
@@ -188,7 +197,7 @@ public class ShopAdminCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        if (args.length == 1) return List.of("reload", "serialize", "additem");
+        if (args.length == 1) return List.of("gui", "reload", "serialize", "additem");
         if (args.length == 2 && args[0].equalsIgnoreCase("additem")) {
             File categoriesDir = new File(plugin.getDataFolder(), "categories");
             File[] files = categoriesDir.listFiles((d, n) -> n.endsWith(".yml"));
