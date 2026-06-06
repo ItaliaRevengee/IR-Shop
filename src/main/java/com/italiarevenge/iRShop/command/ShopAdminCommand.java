@@ -13,9 +13,19 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ShopAdminCommand implements CommandExecutor, TabCompleter {
 
@@ -45,6 +55,7 @@ public class ShopAdminCommand implements CommandExecutor, TabCompleter {
                         Placeholder.parsed("ms", String.valueOf(ms))));
             }
             case "serialize" -> handleSerialize(sender);
+            case "additem"   -> handleAddItem(sender, args);
             default -> sendHelp(sender);
         }
         return true;
@@ -88,17 +99,109 @@ public class ShopAdminCommand implements CommandExecutor, TabCompleter {
                 "  <white>  sell: 50.0"));
     }
 
+    /**
+     * /shopadmin additem <category> <buy> <sell>
+     * Appends the held item to the given category YAML file, then reloads.
+     * Plain items (no custom name/lore/enchants/CMD) use the "material:" format;
+     * everything else uses "serialized:" so all NBT is preserved.
+     */
+    private void handleAddItem(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage(msg.get("general.player-only"));
+            return;
+        }
+        if (args.length < 4) {
+            sender.sendMessage(MessageManager.parse(
+                    "<red>Uso: /shopadmin additem <categoria> <prezzo-acquisto> <prezzo-vendita>"));
+            return;
+        }
+
+        String categoryId = args[1];
+        double buyPrice, sellPrice;
+        try {
+            buyPrice  = Double.parseDouble(args[2]);
+            sellPrice = Double.parseDouble(args[3]);
+        } catch (NumberFormatException e) {
+            sender.sendMessage(MessageManager.parse("<red>Prezzi non validi."));
+            return;
+        }
+
+        ItemStack held = player.getInventory().getItemInMainHand();
+        if (held.getType().isAir()) {
+            sender.sendMessage(MessageManager.parse("<red>Tieni un oggetto in mano."));
+            return;
+        }
+
+        File categoryFile = new File(plugin.getDataFolder(), "categories/" + categoryId + ".yml");
+        if (!categoryFile.exists()) {
+            sender.sendMessage(MessageManager.parse(
+                    "<red>Categoria '<white>" + categoryId + "<red>' non trovata."));
+            return;
+        }
+
+        String entry;
+        if (isPlainItem(held)) {
+            entry = "  - material: " + held.getType().name() + "\n"
+                  + "    buy: "      + buyPrice              + "\n"
+                  + "    sell: "     + sellPrice             + "\n";
+        } else {
+            String b64 = Base64.getEncoder().encodeToString(ItemBuilder.serializeNbt(held));
+            entry = "  - serialized: \"" + b64 + "\"\n"
+                  + "    buy: "          + buyPrice          + "\n"
+                  + "    sell: "         + sellPrice         + "\n";
+        }
+
+        try {
+            Files.write(categoryFile.toPath(), entry.getBytes(StandardCharsets.UTF_8),
+                    StandardOpenOption.APPEND);
+        } catch (IOException e) {
+            sender.sendMessage(MessageManager.parse(
+                    "<red>Errore scrittura file: " + e.getMessage()));
+            return;
+        }
+
+        plugin.reload();
+        sender.sendMessage(MessageManager.parse(
+                "<green>Oggetto <white>" + held.getType().name()
+                + " <green>aggiunto alla categoria <white>" + categoryId + "<green>."));
+    }
+
+    private boolean isPlainItem(ItemStack item) {
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) return true;
+        return !meta.hasDisplayName()
+            && !meta.hasLore()
+            && !meta.hasEnchants()
+            && !meta.hasCustomModelData()
+            && !(meta instanceof LeatherArmorMeta);
+    }
+
     private void sendHelp(CommandSender sender) {
         sender.sendMessage(msg.getRaw("help.header"));
         sender.sendMessage(msg.getRaw("help.admin-reload"));
         sender.sendMessage(MessageManager.parse(
                 "  <yellow>/shopadmin serialize</yellow> <dark_gray>—</dark_gray> <gray>Copy Base64 of held item (for custom NBT shop items)"));
+        sender.sendMessage(MessageManager.parse(
+                "  <yellow>/shopadmin additem <categoria> <buy> <sell></yellow> <dark_gray>—</dark_gray> <gray>Aggiunge l'oggetto in mano alla categoria"));
         sender.sendMessage(msg.getRaw("help.footer"));
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        if (args.length == 1) return List.of("reload", "serialize");
+        if (args.length == 1) return List.of("reload", "serialize", "additem");
+        if (args.length == 2 && args[0].equalsIgnoreCase("additem")) {
+            File categoriesDir = new File(plugin.getDataFolder(), "categories");
+            File[] files = categoriesDir.listFiles((d, n) -> n.endsWith(".yml"));
+            if (files == null) return List.of();
+            return Arrays.stream(files)
+                    .map(f -> f.getName().replace(".yml", ""))
+                    .filter(n -> n.startsWith(args[1].toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+        if (args.length == 3 && args[0].equalsIgnoreCase("additem"))
+            return List.of("10.0", "50.0", "100.0", "500.0");
+        if (args.length == 4 && args[0].equalsIgnoreCase("additem"))
+            return List.of("-1", "5.0", "25.0", "50.0");
         return List.of();
     }
 }

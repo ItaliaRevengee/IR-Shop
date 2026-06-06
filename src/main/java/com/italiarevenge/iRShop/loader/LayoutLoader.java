@@ -38,7 +38,7 @@ public class LayoutLoader {
     }
 
     private void saveDefaults() {
-        for (String name : List.of("layouts/classic.yml", "layouts/dark.yml", "layouts/modern.yml", "layouts/rpg.yml")) {
+        for (String name : List.of("layouts/classic.yml")) {
             File f = new File(plugin.getDataFolder(), name);
             if (!f.exists()) {
                 f.getParentFile().mkdirs();
