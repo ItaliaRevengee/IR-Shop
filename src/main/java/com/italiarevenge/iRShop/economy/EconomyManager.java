@@ -1,10 +1,11 @@
 package com.italiarevenge.iRShop.economy;
 
-import com.italiarevenge.iRShop.IRShop;
-import net.milkbowl.vault.economy.Economy;
-import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
+
+import com.italiarevenge.iRShop.IRShop;
+
+import net.milkbowl.vault.economy.Economy;
 
 public class EconomyManager {
 
