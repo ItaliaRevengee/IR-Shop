@@ -3,6 +3,7 @@ package com.italiarevenge.iRShop.gui;
 import com.italiarevenge.iRShop.IRShop;
 import com.italiarevenge.iRShop.config.MessageManager;
 import com.italiarevenge.iRShop.model.ShopItem;
+import com.italiarevenge.iRShop.util.ItemBuilder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
@@ -11,8 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.List;
 
 public class QuantityGui extends BaseGui {
 
@@ -61,15 +60,7 @@ public class QuantityGui extends BaseGui {
     }
 
     private ItemStack buildPreview() {
-        ItemStack item = new ItemStack(shopItem.getMaterial(), 1);
-        ItemMeta meta  = item.getItemMeta();
-        meta.displayName(MessageManager.parse("<white>" + prettify(shopItem.getMaterial())));
-        meta.lore(List.of(
-                MessageManager.parse("<gray>Base price: <green>"
-                        + IRShop.get().getEconomyManager().format(shopItem.getBuyPrice()))
-        ));
-        item.setItemMeta(meta);
-        return item;
+        return ItemBuilder.buildDisplay(shopItem);
     }
 
     @Override
@@ -95,22 +86,20 @@ public class QuantityGui extends BaseGui {
     // ── helpers ─────────────────────────────────────────────────────────────
 
     private ItemStack buildQtyButton(int index) {
-        int qty   = QUANTITIES[index];
-        // Cap display stack at the material's max stack size
+        int qty        = QUANTITIES[index];
         int displayAmt = Math.min(qty, shopItem.getMaterial().getMaxStackSize());
-        double total = shopItem.getBuyPrice() * qty;
+        double total   = shopItem.getBuyPrice() * qty;
         String totalFormatted = IRShop.get().getEconomyManager().format(total);
 
-        ItemStack item = new ItemStack(shopItem.getMaterial(), displayAmt);
-        ItemMeta meta  = item.getItemMeta();
+        // Start from the real item (preserves custom name, enchants, NBT, etc.)
+        ItemStack item = ItemBuilder.buildClean(shopItem);
+        item.setAmount(displayAmt);
 
-        meta.displayName(msg.getRaw("quantity-gui.button-name",
-                Placeholder.parsed("qty", String.valueOf(qty))));
-
+        // Only override lore to show qty/price; keep the item's own display name
+        ItemMeta meta = item.getItemMeta();
         meta.lore(msg.getList("quantity-gui.button-lore",
                 Placeholder.parsed("qty",   String.valueOf(qty)),
                 Placeholder.parsed("price", totalFormatted)));
-
         item.setItemMeta(meta);
         return item;
     }
@@ -123,10 +112,4 @@ public class QuantityGui extends BaseGui {
         return item;
     }
 
-    private String prettify(Material mat) {
-        String[] words = mat.name().toLowerCase().split("_");
-        StringBuilder sb = new StringBuilder();
-        for (String w : words) sb.append(Character.toUpperCase(w.charAt(0))).append(w.substring(1)).append(' ');
-        return sb.toString().trim();
-    }
 }
