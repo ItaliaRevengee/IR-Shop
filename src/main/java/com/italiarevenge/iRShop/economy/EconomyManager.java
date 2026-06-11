@@ -46,7 +46,20 @@ public class EconomyManager {
     }
 
     public String format(double amount) {
-        if (economy == null) return String.format("%.2f", amount);
-        return economy.format(amount);
+        if (economy != null) {
+            String s = economy.format(amount);
+            // If Vault's formatter lost decimal precision (e.g. 0.40 → "0"), fall back
+            String digits = s.replaceAll("[^0-9.]", "");
+            if (!digits.isEmpty()) {
+                try {
+                    if (Math.abs(Double.parseDouble(digits) - amount) <= 0.005)
+                        return s;
+                } catch (NumberFormatException ignored) {}
+            }
+        }
+        // Own formatter: integer if whole number, otherwise strip trailing zeros
+        if (amount == Math.floor(amount) && !Double.isInfinite(amount))
+            return String.valueOf((long) amount);
+        return new java.math.BigDecimal(String.valueOf(amount)).stripTrailingZeros().toPlainString();
     }
 }

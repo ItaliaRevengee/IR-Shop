@@ -1,5 +1,6 @@
 package com.italiarevenge.iRShop;
 
+import com.italiarevenge.iRShop.command.SellGuiCommand;
 import com.italiarevenge.iRShop.command.ShopAdminCommand;
 import com.italiarevenge.iRShop.command.ShopCommand;
 import com.italiarevenge.iRShop.config.ConfigManager;
@@ -45,6 +46,7 @@ public final class IRShop extends JavaPlugin {
         getCommand("shop").setTabCompleter(new ShopCommand(this));
         getCommand("shopadmin").setExecutor(new ShopAdminCommand(this));
         getCommand("shopadmin").setTabCompleter(new ShopAdminCommand(this));
+        getCommand("sellgui").setExecutor(new SellGuiCommand(this));
 
         getLogger().info("IR-Shop enabled — " + shopLoader.getShops().size() + " shop(s) loaded.");
     }

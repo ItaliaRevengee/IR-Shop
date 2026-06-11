@@ -23,6 +23,12 @@ public final class ItemMatcher {
 
     private ItemMatcher() {}
 
+    /** Returns true if the given ItemStack matches the ShopItem's matching rules. */
+    public static boolean matchesStack(ItemStack stack, ShopItem shopItem) {
+        ItemStack template = shopItem.isSerialized() ? deserializeTemplate(shopItem) : null;
+        return matches(stack, shopItem, template);
+    }
+
     /** Returns the total count of matching items in the player's inventory. */
     public static int count(Player player, ShopItem shopItem) {
         ItemStack template = shopItem.isSerialized() ? deserializeTemplate(shopItem) : null;

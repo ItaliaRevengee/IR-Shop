@@ -56,3 +56,10 @@ commands:
     aliases:
       - sadmin
       - shopeditor
+  sellgui:
+    description: Open the sell GUI to sell items from your inventory
+    usage: /sellgui
+    permission: irshop.use
+    aliases:
+      - sell
+      - sellmenu

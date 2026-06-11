@@ -49,6 +49,24 @@ quantity-gui:
     - ""
     - "<yellow>Click <gray>to buy"
 
+sellgui:
+  title: "<dark_gray>Vendi <gold>Oggetti"
+  sell-button-name: "<green><bold>✔ Vendi"
+  sell-button-lore:
+    - "<gray>Vende tutti gli oggetti inseriti."
+    - "<gray>Quelli non vendibili tornano nell'inventario."
+  cancel-button-name: "<red><bold>✗ Annulla"
+  cancel-button-lore:
+    - "<gray>Restituisce tutti gli oggetti all'inventario."
+  info-button-name: "<gold><bold>Valore Totale"
+  info-button-lore:
+    - "<gray>Guadagno stimato: <green><total>"
+    - ""
+    - "<yellow>Inserisci oggetti nelle celle sopra."
+  sold: "<green>Venduti <white><amount></white> oggetti per <white><price></white>!"
+  nothing-to-sell: "<red>Non hai inserito nessun oggetto da vendere."
+  unsellable-returned: "<yellow>Gli oggetti non vendibili sono stati restituiti al tuo inventario."
+
 admin:
   reloaded: "<green>IR-Shop reloaded in <white><ms>ms</white>."
   reload-error: "<red>Reload failed — check console for details."
