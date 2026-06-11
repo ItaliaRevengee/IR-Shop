@@ -258,10 +258,7 @@ public class SellGui extends BaseGui {
     }
 
     private double getSellMultiplier() {
-        if (player.hasPermission("irshop.sell.2"))    return 2.0;
-        if (player.hasPermission("irshop.sell.1.5"))  return 1.5;
-        if (player.hasPermission("irshop.sell.1.25")) return 1.25;
-        return 1.0;
+        return com.italiarevenge.iRShop.util.ItemBuilder.getSellMultiplier(player);
     }
 
     private ItemStack fillerPane() {

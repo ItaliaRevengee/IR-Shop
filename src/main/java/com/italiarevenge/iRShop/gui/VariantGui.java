@@ -70,7 +70,7 @@ public class VariantGui extends BaseGui implements TransactionHost {
         List<ShopItem> variants = parentItem.getVariants();
         for (int i = 0; i < variants.size() && i < navRowStart; i++) {
             ShopItem variant = variants.get(i);
-            inventory.setItem(i, ItemBuilder.buildDisplay(variant));
+            inventory.setItem(i, ItemBuilder.buildDisplay(variant, player));
             slotItems[i] = variant;
         }
 

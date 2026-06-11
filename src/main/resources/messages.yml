@@ -109,12 +109,20 @@ gui:
     - "<yellow>Right-click <gray>to sell 1"
     - "<yellow>Shift-right-click <gray>to sell all"
 
+  item-sell-lore-append-multiplied:
+    - "<gray>Sell: <dark_gray><strikethrough><sell-price></strikethrough> <gold><sell-price-multiplied> <currency> <yellow>(<multiplier>x)"
+    - "<yellow>Right-click <gray>to sell 1"
+    - "<yellow>Shift-right-click <gray>to sell all"
+
   item-buy-price-only:
     - ""
     - "<gray>Buy: <green><buy-price> <currency>"
 
   item-sell-price-only:
     - "<gray>Sell: <gold><sell-price> <currency>"
+
+  item-sell-price-only-multiplied:
+    - "<gray>Sell: <dark_gray><strikethrough><sell-price></strikethrough> <gold><sell-price-multiplied> <currency> <yellow>(<multiplier>x)"
 
   item-not-for-sale: "<red>✗ Not for sale"
 

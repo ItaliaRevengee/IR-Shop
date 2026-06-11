@@ -60,7 +60,7 @@ public class QuantityGui extends BaseGui {
     }
 
     private ItemStack buildPreview() {
-        return ItemBuilder.buildDisplay(shopItem);
+        return ItemBuilder.buildDisplay(shopItem, player);
     }
 
     @Override

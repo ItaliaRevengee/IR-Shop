@@ -77,7 +77,7 @@ public class ItemListGui extends BaseGui implements TransactionHost {
             if (idx >= items.size()) break;
             ShopItem shopItem = items.get(idx);
             int slot = layout.itemSlots.get(i);
-            inventory.setItem(slot, ItemBuilder.buildDisplay(shopItem));
+            inventory.setItem(slot, ItemBuilder.buildDisplay(shopItem, player));
             slotItems[slot] = shopItem;
             if (shopItem.hasVariants()) startCycling(slot, shopItem);
         }
@@ -255,7 +255,7 @@ public class ItemListGui extends BaseGui implements TransactionHost {
         if (variants.size() < 2) return;
 
         // Pre-build the display meta once (name + lore from the group item)
-        ItemStack baseDisplay = ItemBuilder.buildDisplay(groupItem);
+        ItemStack baseDisplay = ItemBuilder.buildDisplay(groupItem, player);
         ItemMeta  baseMeta   = baseDisplay.getItemMeta();
 
         final int[] index = {0};

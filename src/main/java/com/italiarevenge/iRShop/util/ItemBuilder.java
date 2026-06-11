@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.bukkit.entity.Player;
 
 /**
  * Converts a {@link ShopItem} config model into a live {@link ItemStack},
@@ -58,17 +59,35 @@ public final class ItemBuilder {
      * Appends buy/sell price lore so the player sees prices in the tooltip.
      */
     public static ItemStack buildDisplay(ShopItem shopItem) {
+        return buildDisplay(shopItem, null);
+    }
+
+    /**
+     * Player-aware variant: if the player has a sell multiplier the sell price
+     * is shown with the original struck-through and the boosted price alongside.
+     */
+    public static ItemStack buildDisplay(ShopItem shopItem, Player player) {
+        double multiplier = getSellMultiplier(player);
         ItemStack base;
         if (shopItem.isSerialized()) {
             try {
                 base = ItemStack.deserializeBytes(shopItem.getSerializedBytes()).clone();
-                appendPriceLore(base, shopItem);
+                appendPriceLore(base, shopItem, multiplier);
                 return base;
             } catch (Exception e) {
                 IRShop.get().getLogger().warning("Failed to deserialize item bytes for display: " + e.getMessage());
             }
         }
-        return applyMeta(new ItemStack(shopItem.getMaterial()), shopItem, true);
+        return applyMeta(new ItemStack(shopItem.getMaterial()), shopItem, true, multiplier);
+    }
+
+    /** Returns the sell multiplier for the given player (1.0 if no player or no permission). */
+    public static double getSellMultiplier(Player player) {
+        if (player == null) return 1.0;
+        if (player.hasPermission("irshop.sell.2"))    return 2.0;
+        if (player.hasPermission("irshop.sell.1.5"))  return 1.5;
+        if (player.hasPermission("irshop.sell.1.25")) return 1.25;
+        return 1.0;
     }
 
     /**
@@ -96,6 +115,10 @@ public final class ItemBuilder {
     // ── internal ────────────────────────────────────────────────────────────
 
     private static ItemStack applyMeta(ItemStack item, ShopItem shopItem, boolean appendPrices) {
+        return applyMeta(item, shopItem, appendPrices, 1.0);
+    }
+
+    private static ItemStack applyMeta(ItemStack item, ShopItem shopItem, boolean appendPrices, double sellMultiplier) {
         ItemMeta meta = item.getItemMeta();
 
         // Display name
@@ -140,7 +163,7 @@ public final class ItemBuilder {
         }
 
         // Lore (custom + optional price overlay)
-        List<Component> lore = buildLore(shopItem, appendPrices);
+        List<Component> lore = buildLore(shopItem, appendPrices, sellMultiplier);
         meta.lore(lore);
 
         item.setItemMeta(meta);
@@ -153,29 +176,29 @@ public final class ItemBuilder {
         return item;
     }
 
-    private static void appendPriceLore(ItemStack item, ShopItem shopItem) {
+    private static void appendPriceLore(ItemStack item, ShopItem shopItem, double sellMultiplier) {
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return;
         List<Component> lore = meta.lore();
         if (lore == null) lore = new ArrayList<>();
         else lore = new ArrayList<>(lore);
-        appendPriceLines(lore, shopItem);
+        appendPriceLines(lore, shopItem, sellMultiplier);
         meta.lore(lore);
         item.setItemMeta(meta);
     }
 
-    private static List<Component> buildLore(ShopItem shopItem, boolean appendPrices) {
+    private static List<Component> buildLore(ShopItem shopItem, boolean appendPrices, double sellMultiplier) {
         List<Component> lore = new ArrayList<>();
         for (String line : shopItem.getCustomLore()) {
             lore.add(MessageManager.parse(line));
         }
         if (appendPrices) {
-            appendPriceLines(lore, shopItem);
+            appendPriceLines(lore, shopItem, sellMultiplier);
         }
         return lore;
     }
 
-    private static void appendPriceLines(List<Component> lore, ShopItem shopItem) {
+    private static void appendPriceLines(List<Component> lore, ShopItem shopItem, double sellMultiplier) {
         var msg     = IRShop.get().getMessageManager();
         var economy = IRShop.get().getEconomyManager();
 
@@ -196,9 +219,17 @@ public final class ItemBuilder {
                 lore.add(MessageManager.parse(msg.raw().getString("gui.item-not-for-sale", "<red>✗ Not for sale")));
             }
             if (anySellable && uniformSell && variants.get(0).isSellable()) {
-                lore.addAll(msg.getList("gui.item-sell-price-only",
-                        Placeholder.parsed("sell-price", economy.format(firstSell)),
-                        Placeholder.parsed("currency",   "money")));
+                if (sellMultiplier > 1.0) {
+                    lore.addAll(msg.getList("gui.item-sell-price-only-multiplied",
+                            Placeholder.parsed("sell-price",            economy.format(firstSell)),
+                            Placeholder.parsed("sell-price-multiplied", economy.format(firstSell * sellMultiplier)),
+                            Placeholder.parsed("multiplier",            formatMultiplier(sellMultiplier)),
+                            Placeholder.parsed("currency",              "money")));
+                } else {
+                    lore.addAll(msg.getList("gui.item-sell-price-only",
+                            Placeholder.parsed("sell-price", economy.format(firstSell)),
+                            Placeholder.parsed("currency",   "money")));
+                }
             }
             lore.add(MessageManager.parse(msg.raw().getString("gui.item-variants-hint", "<yellow>Click <gray>to choose a variant")));
             return;
@@ -213,10 +244,22 @@ public final class ItemBuilder {
             lore.add(MessageManager.parse(raw));
         }
         if (shopItem.isSellable()) {
-            lore.addAll(msg.getList("gui.item-sell-lore-append",
-                    Placeholder.parsed("sell-price", economy.format(shopItem.getSellPrice())),
-                    Placeholder.parsed("currency",   "money")));
+            if (sellMultiplier > 1.0) {
+                lore.addAll(msg.getList("gui.item-sell-lore-append-multiplied",
+                        Placeholder.parsed("sell-price",            economy.format(shopItem.getSellPrice())),
+                        Placeholder.parsed("sell-price-multiplied", economy.format(shopItem.getSellPrice() * sellMultiplier)),
+                        Placeholder.parsed("multiplier",            formatMultiplier(sellMultiplier)),
+                        Placeholder.parsed("currency",              "money")));
+            } else {
+                lore.addAll(msg.getList("gui.item-sell-lore-append",
+                        Placeholder.parsed("sell-price", economy.format(shopItem.getSellPrice())),
+                        Placeholder.parsed("currency",   "money")));
+            }
         }
+    }
+
+    private static String formatMultiplier(double m) {
+        return m == (long) m ? String.valueOf((long) m) : String.valueOf(m);
     }
 
     // ── PDC helpers ─────────────────────────────────────────────────────────
