@@ -20,6 +20,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SellGui extends BaseGui {
 
@@ -36,11 +37,29 @@ public class SellGui extends BaseGui {
 
     private final MessageManager msg;
     private final EconomyManager economy;
+    private final Map<Material, List<ShopItem>> sellIndex;
+    private boolean infoUpdatePending = false;
 
     public SellGui(Player player) {
         super(player);
-        this.msg     = IRShop.get().getMessageManager();
-        this.economy = IRShop.get().getEconomyManager();
+        this.msg       = IRShop.get().getMessageManager();
+        this.economy   = IRShop.get().getEconomyManager();
+        this.sellIndex = buildSellIndex();
+    }
+
+    private Map<Material, List<ShopItem>> buildSellIndex() {
+        Map<Material, List<ShopItem>> index = new HashMap<>();
+        for (Shop shop : IRShop.get().getShopLoader().getShops().values()) {
+            for (ShopCategory category : shop.getCategories()) {
+                for (ShopItem item : category.getItems()) {
+                    if (item.isSellable()) index.computeIfAbsent(item.getMaterial(), k -> new ArrayList<>()).add(item);
+                    for (ShopItem variant : item.getVariants()) {
+                        if (variant.isSellable()) index.computeIfAbsent(variant.getMaterial(), k -> new ArrayList<>()).add(variant);
+                    }
+                }
+            }
+        }
+        return index;
     }
 
     // ── lifecycle ─────────────────────────────────────────────────────────────
@@ -92,7 +111,12 @@ public class SellGui extends BaseGui {
     }
 
     private void scheduleInfoUpdate() {
-        Bukkit.getScheduler().runTask(IRShop.get(), this::updateInfoButton);
+        if (infoUpdatePending) return;
+        infoUpdatePending = true;
+        Bukkit.getScheduler().runTask(IRShop.get(), () -> {
+            infoUpdatePending = false;
+            updateInfoButton();
+        });
     }
 
     // ── click handling ────────────────────────────────────────────────────────
@@ -230,17 +254,10 @@ public class SellGui extends BaseGui {
     }
 
     private ShopItem findMatchingShopItem(ItemStack stack) {
-        for (Shop shop : IRShop.get().getShopLoader().getShops().values()) {
-            for (ShopCategory category : shop.getCategories()) {
-                for (ShopItem shopItem : category.getItems()) {
-                    if (shopItem.isSellable() && ItemMatcher.matchesStack(stack, shopItem))
-                        return shopItem;
-                    for (ShopItem variant : shopItem.getVariants()) {
-                        if (variant.isSellable() && ItemMatcher.matchesStack(stack, variant))
-                            return variant;
-                    }
-                }
-            }
+        List<ShopItem> candidates = sellIndex.get(stack.getType());
+        if (candidates == null) return null;
+        for (ShopItem shopItem : candidates) {
+            if (ItemMatcher.matchesStack(stack, shopItem)) return shopItem;
         }
         return null;
     }

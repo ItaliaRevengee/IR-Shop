@@ -15,7 +15,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CategoryListGui extends BaseGui {
 
@@ -23,6 +25,7 @@ public class CategoryListGui extends BaseGui {
     private final Layout layout;
     private final MessageManager msg;
     private final EconomyManager economy;
+    private final Map<Integer, ShopCategory> slotMap = new HashMap<>();
 
     public CategoryListGui(Player player, Shop shop) {
         super(player);
@@ -39,10 +42,12 @@ public class CategoryListGui extends BaseGui {
 
         fillBackground();
 
+        slotMap.clear();
         for (ShopCategory cat : shop.getCategories()) {
             int slot = cat.getSlot();
             if (slot >= 0 && slot < layout.rows * 9) {
                 inventory.setItem(slot, buildCategoryItem(cat));
+                slotMap.put(slot, cat);
             }
         }
 
@@ -64,12 +69,10 @@ public class CategoryListGui extends BaseGui {
             return;
         }
 
-        for (ShopCategory cat : shop.getCategories()) {
-            if (cat.getSlot() == slot) {
-                playSound("navigate-back");
-                new ItemListGui(player, shop, cat, 0).open();
-                return;
-            }
+        ShopCategory cat = slotMap.get(slot);
+        if (cat != null) {
+            playSound("navigate-back");
+            new ItemListGui(player, shop, cat, 0).open();
         }
     }
 

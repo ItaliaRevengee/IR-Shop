@@ -38,6 +38,7 @@ public class ItemListGui extends BaseGui implements TransactionHost {
     private int page;
     private final ShopItem[] slotItems;
     private final Map<Integer, BukkitTask> cyclingTasks = new HashMap<>();
+    private ItemStack cachedBg;
 
     public ItemListGui(Player player, Shop shop, ShopCategory category, int page) {
         super(player);
@@ -202,11 +203,14 @@ public class ItemListGui extends BaseGui implements TransactionHost {
     // ── helpers ──────────────────────────────────────────────────────────────
 
     private void fillBackground() {
-        ItemStack bg = new ItemStack(layout.bgMaterial);
-        ItemMeta m   = bg.getItemMeta();
-        m.displayName(Component.empty());
-        bg.setItemMeta(m);
-        for (int i = 0; i < layout.rows * 9; i++) inventory.setItem(i, bg);
+        if (cachedBg == null) {
+            cachedBg = new ItemStack(layout.bgMaterial);
+            ItemMeta m = cachedBg.getItemMeta();
+            m.displayName(Component.empty());
+            cachedBg.setItemMeta(m);
+        }
+        int size = layout.rows * 9;
+        for (int i = 0; i < size; i++) inventory.setItem(i, cachedBg);
     }
 
     private ItemStack navItem(Material mat, Component name) {
@@ -254,19 +258,23 @@ public class ItemListGui extends BaseGui implements TransactionHost {
         List<ShopItem> variants = groupItem.getVariants();
         if (variants.size() < 2) return;
 
-        // Pre-build the display meta once (name + lore from the group item)
         ItemStack baseDisplay = ItemBuilder.buildDisplay(groupItem, player);
         ItemMeta  baseMeta   = baseDisplay.getItemMeta();
+
+        // Pre-build all variant stacks once — avoids allocating + cloning meta every tick
+        ItemStack[] cycleStacks = new ItemStack[variants.size()];
+        for (int i = 0; i < variants.size(); i++) {
+            ItemStack s = new ItemStack(variants.get(i).getMaterial());
+            s.setItemMeta(baseMeta.clone());
+            cycleStacks[i] = s;
+        }
 
         final int[] index = {0};
         BukkitTask task = new org.bukkit.scheduler.BukkitRunnable() {
             @Override public void run() {
                 if (inventory == null) { cancel(); return; }
-                index[0] = (index[0] + 1) % variants.size();
-                Material mat = variants.get(index[0]).getMaterial();
-                ItemStack cycled = new ItemStack(mat);
-                cycled.setItemMeta(baseMeta.clone());
-                inventory.setItem(slot, cycled);
+                index[0] = (index[0] + 1) % cycleStacks.length;
+                inventory.setItem(slot, cycleStacks[index[0]]);
             }
         }.runTaskTimer(IRShop.get(), 30L, 30L);
 

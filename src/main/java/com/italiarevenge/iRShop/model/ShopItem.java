@@ -4,6 +4,7 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Collections;
 import java.util.List;
@@ -70,6 +71,9 @@ public class ShopItem {
     // Full NBT preservation via Paper serialisation
     private final byte[] serializedBytes;  // null = build from fields above
 
+    // Cached deserialized template — lazy, main-thread only
+    private transient ItemStack cachedTemplate;
+
     // Variant group: if non-empty this item is a selector that opens a sub-GUI
     private final List<ShopItem> variants;
 
@@ -108,6 +112,15 @@ public class ShopItem {
     public boolean isSerialized()               { return serializedBytes != null; }
     public List<ShopItem> getVariants()         { return variants; }
     public boolean hasVariants()                { return !variants.isEmpty(); }
+
+    /** Returns a cached deserialized template for NBT matching. Call only from the main thread. */
+    public ItemStack getCachedTemplate() {
+        if (cachedTemplate == null && serializedBytes != null) {
+            try { cachedTemplate = ItemStack.deserializeBytes(serializedBytes); }
+            catch (Exception ignored) {}
+        }
+        return cachedTemplate;
+    }
 
     // ── builder ─────────────────────────────────────────────────────────────
 

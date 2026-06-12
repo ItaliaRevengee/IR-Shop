@@ -1,6 +1,5 @@
 package com.italiarevenge.iRShop.util;
 
-import com.italiarevenge.iRShop.IRShop;
 import com.italiarevenge.iRShop.model.PdcEntry;
 import com.italiarevenge.iRShop.model.ShopItem;
 import org.bukkit.NamespacedKey;
@@ -9,6 +8,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Counts and removes matching items from a player's inventory.
@@ -22,6 +23,16 @@ import org.bukkit.persistence.PersistentDataType;
 public final class ItemMatcher {
 
     private ItemMatcher() {}
+
+    private static final NamespacedKey INVALID_KEY = NamespacedKey.minecraft("__irshop_invalid__");
+    private static final ConcurrentHashMap<PdcEntry, NamespacedKey> KEY_CACHE = new ConcurrentHashMap<>();
+
+    private static NamespacedKey getKey(PdcEntry entry) {
+        return KEY_CACHE.computeIfAbsent(entry, e -> {
+            try { return new NamespacedKey(e.namespace(), e.key()); }
+            catch (Exception ex) { return INVALID_KEY; }
+        });
+    }
 
     /** Returns true if the given ItemStack matches the ShopItem's matching rules. */
     public static boolean matchesStack(ItemStack stack, ShopItem shopItem) {
@@ -92,12 +103,8 @@ public final class ItemMatcher {
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
 
         for (PdcEntry entry : shopItem.getPdcEntries()) {
-            NamespacedKey key;
-            try {
-                key = new NamespacedKey(entry.namespace(), entry.key());
-            } catch (Exception e) {
-                return false;
-            }
+            NamespacedKey key = getKey(entry);
+            if (key == INVALID_KEY) return false;
             if (!pdcEntryMatches(pdc, key, entry)) return false;
         }
         return true;
@@ -138,11 +145,6 @@ public final class ItemMatcher {
     }
 
     private static ItemStack deserializeTemplate(ShopItem shopItem) {
-        try {
-            return ItemStack.deserializeBytes(shopItem.getSerializedBytes());
-        } catch (Exception e) {
-            IRShop.get().getLogger().warning("Failed to deserialize template for matching: " + e.getMessage());
-            return null;
-        }
+        return shopItem.getCachedTemplate();
     }
 }
